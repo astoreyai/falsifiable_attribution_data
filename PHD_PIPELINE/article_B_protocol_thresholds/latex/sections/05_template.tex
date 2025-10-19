@@ -1,0 +1,268 @@
+% Section 5: Forensic Reporting Template
+% Humanized: Practitioner-ready, concrete examples, honest assessment
+
+\section{Forensic Reporting Template}
+\label{sec:template}
+
+\subsection{Template Structure and Purpose}
+
+To meet Daubert admissibility standards (Section~\ref{sec:background}) and regulatory transparency requirements, attribution validation results must be reported using a standardized structure. We provide a seven-field template designed for forensic analysts, legal professionals, and AI auditors. Each field addresses specific evidentiary criteria:
+
+\begin{itemize}
+\item \textbf{Field 1 (Method ID):} Addresses Daubert prong 2 (peer review)—specifies exact methods for reproducibility
+\item \textbf{Field 2 (Parameters):} Operationalizes EU AI Act Article~15 (technical documentation)
+\item \textbf{Field 3 ($\Delta$-Prediction Accuracy):} Addresses Daubert prong 1 (testability) and AI Act Article~13(3)(d) (accuracy metrics)
+\item \textbf{Field 4 (CI Calibration):} Enables GDPR Article~22 contestation through uncertainty quantification
+\item \textbf{Field 5 (Error Rates):} Addresses Daubert prong 3 (known error rates) and NRC 2009 forensic standards
+\item \textbf{Field 6 (Limitations):} Ensures AI Act Article~13 transparency and prevents overclaiming
+\item \textbf{Field 7 (Recommendation):} Provides actionable deployment guidance with explicit restrictions
+\end{itemize}
+
+Table~\ref{tab:template_fields} summarizes required information for each field.
+
+\begin{table*}[!t]
+\centering
+\caption{Forensic Reporting Template: Required Information by Field}
+\label{tab:template_fields}
+\small
+\begin{tabular}{@{}p{0.12\textwidth}p{0.35\textwidth}p{0.45\textwidth}@{}}
+\toprule
+\textbf{Field} & \textbf{Required Information} & \textbf{Purpose / Evidentiary Standard} \\ \midrule
+1: Method ID & Attribution method (name, version, implementation), model architecture (training data, source, checkpoint) & Daubert prong 2 (peer review), reproducibility \\ \midrule
+2: Parameters & Feature thresholds, counterfactual settings, statistical test parameters, pre-registered thresholds (with timestamp), dataset details & EU AI Act Art.~15 (technical documentation), transparency \\ \midrule
+3: $\Delta$-Accuracy & Pearson $\rho$ (95\% CI, p-value), R$^2$, MAE/RMSE, scatter plot & Daubert prong 1 (testability), AI Act Art.~13(3)(d) (accuracy) \\ \midrule
+4: CI Calibration & Empirical coverage rate (90\% CIs), binomial test p-value, stratified coverage (by score range), calibration plot & GDPR Art.~22 (contestation), uncertainty quantification \\ \midrule
+5: Error Rates & Overall falsification rate (95\% CI), failure mode breakdown, demographic stratification (age, gender, skin tone), imaging condition stratification, known failure scenarios & Daubert prong 3 (error rates), NRC 2009 (objective standards) \\ \midrule
+6: Limitations & Dataset limitations, model constraints, plausibility assumptions, demographic biases, out-of-scope scenarios & AI Act Art.~13 (transparency), prevent overclaiming \\ \midrule
+7: Recommendation & Overall verdict (NOT FALSIFIED / FALSIFIED), confidence level (High / Moderate / Low), deployment recommendation (APPROVED / APPROVED with RESTRICTIONS / NOT APPROVED), specific restrictions, justification & Actionable guidance, explicit deployment criteria \\ \bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Field-by-Field Guidance}
+
+We now detail each field with concrete examples. For brevity, we present one hypothetical completed report (Section~\ref{sec:example_report}) demonstrating moderate performance with demographic disparities—the most common real-world scenario.
+
+\subsubsection{Field 1: Method Identification}
+
+\textbf{Example:}
+
+\texttt{METHOD IDENTIFICATION}
+
+\textit{Attribution Method:} Gradient-Weighted Class Activation Mapping (Grad-CAM)~\cite{selvaraju2017grad}
+\begin{itemize}
+\item Implementation: Captum v0.6.0 (PyTorch 2.0.1)
+\item Target layer: \texttt{conv5\_3} (final convolutional layer)
+\item Output: 7$\times$7 spatial attribution map (49 features)
+\item No modifications to standard implementation
+\end{itemize}
+
+\textit{Face Verification Model:} ArcFace ResNet-100~\cite{deng2019arcface}
+\begin{itemize}
+\item Architecture: ResNet-100 backbone, 512-D fully connected layer
+\item Embeddings: L2-normalized (unit hypersphere $\mathbb{S}^{511}$)
+\item Loss: Additive angular margin (m=0.5, s=64)
+\item Training: VGGFace2-HQ (3.31M images, 9,131 identities)
+\item Source: Official release, \texttt{github.com/deepinsight/insightface}
+\item Checkpoint: \texttt{glint360k\_r100.pth}
+\end{itemize}
+
+This level of detail enables reproducibility. An independent auditor can obtain the exact model and implementation, re-run validation, and verify results.
+
+\subsubsection{Field 2: Parameter Disclosure}
+
+\textbf{Example (abbreviated):}
+
+\texttt{PARAMETER DISCLOSURE}
+
+\textit{Feature Thresholds:} $\theta_{\text{high}} = 0.7$, $\theta_{\text{low}} = 0.4$ (source: calibration set, N=500 LFW images, identities 0001--0500, no overlap with test set)
+
+\textit{Counterfactual Settings:} $\delta_{\text{target}} = 0.8$~rad, K=200, T=100, $\alpha=0.01$, $\lambda=0.1$
+
+\textit{Pre-Registered Thresholds:} $\tau_{\text{high}} = 0.75$~rad, $\tau_{\text{low}} = 0.55$~rad, $\epsilon = 0.15$~rad, $\rho_{\text{min}} = 0.7$, coverage 90--100\%, pre-registration timestamp: 2024-10-15, OSF ID: \texttt{[TO BE INSERTED]}
+
+\textit{Dataset:} LFW test set, 1,000 image pairs (500 genuine, 500 impostor), demographics: 77\% male, 83\% light skin (based on available annotations)
+
+Transparency is critical. Parameters must be disclosed even if they seem mundane (learning rates, sample sizes). Forensic scrutiny demands completeness.
+
+\subsubsection{Field 3: $\Delta$-Prediction Accuracy}
+
+\textbf{Example:}
+
+\texttt{$\Delta$-PREDICTION ACCURACY}
+
+\textit{Correlation:} Pearson $\rho = 0.73$ (95\% CI: [0.68, 0.78])
+
+\textit{Hypothesis Test:} $H_0: \rho \leq 0.7$ vs.\ $H_1: \rho > 0.7$, p~=~0.012 $\Rightarrow$ \textbf{Reject $H_0$ at $\alpha=0.05$; primary endpoint MET}
+
+\textit{Effect Size:} R$^2 = 0.53$ (53\% explained variance)—moderate predictive accuracy per Cohen (1988)
+
+\textit{Prediction Error:} MAE~=~0.11~rad (6.3$^\circ$), RMSE~=~0.15~rad (8.6$^\circ$)
+
+\textit{Interpretation:} Predicted geodesic distance changes demonstrate moderate-to-strong correlation with observed changes. Attributions show directional correctness (high-attribution features cause larger shifts) but imperfect magnitude estimation. For forensic purposes, this indicates attributions can distinguish important from unimportant features but should be interpreted cautiously for precise quantitative claims.
+
+This interpretation acknowledges both strengths (correlation above threshold) and limitations (53\% explained variance leaves 47\% unexplained). Honest assessment builds trust with legal professionals who will rely on these reports.
+
+\subsubsection{Field 4: Confidence Interval Calibration}
+
+\textbf{Example (abbreviated):}
+
+\texttt{CI CALIBRATION}
+
+\textit{Coverage Rate:} 91.3\% (913 of 1,000 within predicted 90\% CI)
+
+\textit{Calibration Test:} Binomial p~=~0.42 (fail to reject $H_0: p_{\text{coverage}} = 0.90$) $\Rightarrow$ \textbf{well-calibrated}
+
+\textit{Interpretation:} Confidence intervals are reliable. Observed coverage (91.3\%) closely matches nominal 90\%. Practitioners can trust that reported CIs will contain true values $\sim$90\% of the time. Slight over-coverage (91.3\% vs.\ 90\%) suggests conservative (wider) intervals—acceptable in forensic contexts.
+
+\subsubsection{Field 5: Known Error Rates and Failure Modes}
+
+This is often the most important field for legal professionals. It directly addresses Daubert's error rate requirement.
+
+\textbf{Example:}
+
+\texttt{KNOWN ERROR RATES}
+
+\textit{Overall Falsification Rate:} 38\% (380 of 1,000 test cases FALSIFIED), 95\% CI: [35.1\%, 40.9\%]
+
+\textit{Failure Modes:}
+\begin{itemize}
+\item Non-Triviality: 2.1\% (21 cases)
+\item Insufficient Statistical Evidence: 35.9\% (359 cases)
+\item Separation Margin: 0\% (by design)
+\end{itemize}
+
+\textit{Demographic Stratification:}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Group} & \textbf{N} & \textbf{Falsif. Rate} \\ \midrule
+\multicolumn{3}{l}{\textit{Age}} \\
+~~Young ($<$30y) & 287 & 34\% \\
+~~Middle (30--50y) & 485 & 37\% \\
+~~Older ($>$50y) & 228 & 45\% $\dagger$ \\ \midrule
+\multicolumn{3}{l}{\textit{Gender}} \\
+~~Male & 768 & 36\% \\
+~~Female & 232 & 42\% \\ \midrule
+\multicolumn{3}{l}{\textit{Skin Tone}} \\
+~~Light & 831 & 35\% \\
+~~Dark & 169 & 43\% \\ \bottomrule
+\multicolumn{3}{l}{\footnotesize $\dagger$ HIGH DISPARITY: 11pp gap (older vs.\ young)}
+\end{tabular}
+\end{table}
+
+\textit{Known Failure Scenarios:}
+\begin{enumerate}
+\item Extreme poses ($>$45$^\circ$ rotation): 52\% falsification rate
+\item Heavy occlusion (surgical masks, hands covering face): 61\%
+\item Low resolution ($<$80$\times$80 pixels): 48\%
+\item Older individuals ($>$50 years): 45\% (age bias)
+\end{enumerate}
+
+\textit{Interpretation:} Method achieves NOT FALSIFIED status for 62\% of cases but exhibits systematic biases. Higher failure rates for older individuals, females, and darker skin tones indicate demographic disparities. Use with caution in forensically diverse contexts; restrict to high-quality frontal images; require mandatory demographic audit.
+
+This honest reporting of failures builds credibility. Legal professionals can assess whether the method is appropriate for their specific case demographics.
+
+\subsubsection{Field 6: Limitations and Scope}
+
+\textbf{Example (abbreviated):}
+
+\texttt{LIMITATIONS}
+
+\textit{Dataset:} Validated on LFW (celebrity images, frontal poses, high resolution). May NOT generalize to surveillance footage, infrared imagery, or non-Western demographics.
+
+\textit{Model:} ArcFace ResNet-100 specific. Results may differ for CosFace, transformer models, or different embedding dimensions.
+
+\textit{Out-of-Scope:} Video, 3D faces, face identification (1:N search), adversarial robustness, real-time deployment ($\sim$4--9 seconds per image prohibits real-time use).
+
+These limitations aren't weaknesses to hide—they define the scope within which claims hold. Transparent acknowledgment prevents misuse.
+
+\subsubsection{Field 7: Recommendation and Confidence Assessment}
+
+This field translates technical findings into actionable guidance.
+
+\textbf{Example (Moderate Performance with Restrictions):}
+
+\texttt{RECOMMENDATION}
+
+\textit{Verdict:} \textbf{NOT FALSIFIED}
+
+\textit{Confidence Level:} \textbf{MODERATE} (correlation $\rho=0.73$ above threshold, but 38\% falsification rate and demographic disparities)
+
+\textit{Deployment Recommendation:} \textbf{APPROVED for forensic use with RESTRICTIONS}
+
+\textit{Mandatory Restrictions:}
+\begin{enumerate}
+\item Image quality: Minimum 100$\times$100 pixels, pose $<$30$^\circ$ rotation, no heavy occlusion
+\item Demographic audit: Report stratified performance for each case's demographic category
+\item Human expert review: Required when attributions highlight unusual regions (e.g., $>$30\% importance on background)
+\item Uncertainty disclosure: Always report 90\% confidence intervals
+\item Evidentiary limitation: Use as investigative aid, NOT sole evidence; require corroboration
+\end{enumerate}
+
+\textit{Contraindications (DO NOT USE):}
+\begin{itemize}
+\item Surveillance footage $<$80$\times$80 pixels
+\item Profile views ($>$30$^\circ$ rotation)
+\item Video-based verification
+\item Real-time deployment
+\end{itemize}
+
+\textit{Justification:} Moderate predictive accuracy ($\rho=0.73$, R$^2=0.53$) and well-calibrated uncertainty (91.3\% coverage) indicate attributions provide useful forensic insights. However, 38\% falsification rate and demographic disparities (11pp gap for age) necessitate restrictions. These balance utility (enabling use where validation is strongest) with safety (preventing misuse in scenarios where validation fails).
+
+\subsection{Example Completed Report}
+\label{sec:example_report}
+
+Due to space constraints, we present an abbreviated complete report demonstrating the template in practice. Full examples with all fields are available in supplementary materials.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Hypothetical Forensic Attribution Validation Report (Abbreviated)}
+\begin{tabular}{@{}p{0.95\linewidth}@{}}
+\toprule
+\textbf{FORENSIC ATTRIBUTION VALIDATION REPORT} \\
+\textit{Case ID:} [Redacted] \quad \textit{Date:} 2024-10-20 \quad \textit{Analyst:} [Name, Credentials] \\ \midrule
+\textbf{Field 1: Method ID} \\
+Grad-CAM (Captum v0.6.0) | ArcFace ResNet-100 (VGGFace2-HQ, official release) \\ \midrule
+\textbf{Field 2: Parameters} \\
+$\theta_{\text{high}}=0.7$, $\theta_{\text{low}}=0.4$ | $\delta_{\text{target}}=0.8$~rad, K=200 | Pre-reg: OSF \texttt{[ID]}, 2024-10-15 | LFW, N=1,000 \\ \midrule
+\textbf{Field 3: $\Delta$-Accuracy} \\
+$\rho=0.73$ [0.68, 0.78], p=0.012 (\textbf{MET}) | R$^2$=0.53 | MAE=0.11~rad (6.3$^\circ$) \\ \midrule
+\textbf{Field 4: CI Calibration} \\
+Coverage: 91.3\%, binomial p=0.42 (\textbf{well-calibrated}) \\ \midrule
+\textbf{Field 5: Error Rates} \\
+Falsif.: 38\% [35.1\%, 40.9\%] | Age: 34\%/37\%/45\% (young/mid/older, \textbf{11pp disparity}) | Failure: pose$>$30$^\circ$ (52\%), occlusion (61\%) \\ \midrule
+\textbf{Field 6: Limitations} \\
+LFW (celebrity, frontal, high-res) | ArcFace-specific | Out-of-scope: video, 3D, real-time \\ \midrule
+\textbf{Field 7: Recommendation} \\
+Verdict: \textbf{NOT FALSIFIED} | Confidence: \textbf{MODERATE} | Deployment: \textbf{APPROVED with RESTRICTIONS} \\
+Restrictions: (1) Image quality $\geq$100px, pose$<$30$^\circ$; (2) Demographic audit; (3) Expert review for unusual attributions; (4) Report 90\% CIs; (5) Investigative aid only, require corroboration \\
+Contraindications: Surveillance$<$80px, profile views, video, real-time \\ \midrule
+\textit{Analyst Signature:} [Signature] \quad \textit{Supervisor:} [Signature] \quad \textit{Date:} 2024-10-20 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+This condensed format is suitable for case files. The full report (with visualizations, detailed tables, statistical test outputs) would run 10--15 pages.
+
+\subsection{Usage Guidance for Practitioners}
+
+\textbf{When to complete this template:}
+\begin{enumerate}
+\item Before deploying a new attribution method in forensic investigations
+\item After model updates (retraining, fine-tuning)
+\item When dataset shifts significantly (e.g., surveillance footage after validating on LFW)
+\item Annual review (periodic revalidation)
+\end{enumerate}
+
+\textbf{Legal and ethical considerations:}
+\begin{itemize}
+\item \textit{Daubert compliance:} Field~1 (peer review), Field~3 (testability), Field~5 (error rates)
+\item \textit{GDPR/AI Act:} Field~2 (logic), Field~3 (accuracy), Field~6 (transparency)
+\item \textit{Transparency:} Always disclose template to defendants, legal counsel, oversight bodies
+\item \textit{Disclosure:} Make available upon FOIA/public records requests; include as exhibit in court
+\end{itemize}
+
+\textbf{Template versioning:} This is version 1.0 (2024). As regulatory frameworks evolve or new scientific evidence emerges, we will update field requirements. Check \texttt{[repository URL]} for the latest version.

@@ -1,0 +1,112 @@
+\documentclass[journal]{IEEEtran}
+
+% Required packages for IEEE Transactions
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{booktabs}
+\usepackage{array}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Math shortcuts
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Sphere}{\mathbb{S}}
+
+% Citation commands for compatibility
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\citeauthor{#1}~\cite{#1}}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\begin{document}
+
+\title{Falsifiable Attribution for Face Verification via Counterfactual Score Prediction}
+
+\author{Aaron~W.~Storey,~\IEEEmembership{Student Member,~IEEE,}
+        and~Masudul~H.~Imtiaz,~\IEEEmembership{Member,~IEEE}
+\thanks{A. W. Storey and M. H. Imtiaz are with the Department of Computer Science, Clarkson University, Potsdam, NY 13699, USA (e-mail: storeyaw@clarkson.edu; mimtiaz@clarkson.edu).}
+\thanks{Manuscript received October 15, 2025; revised XXX XX, 2025.}}
+
+\markboth{IEEE Transactions on Pattern Analysis and Machine Intelligence,~Vol.~XX, No.~X, XXX~2026}%
+{Storey \MakeLowercase{\textit{et al.}}: Falsifiable Attribution for Face Verification}
+
+\maketitle
+
+\begin{abstract}
+Face verification systems achieve near-perfect accuracy on benchmark datasets, yet their deployment in forensic contexts has led to documented wrongful arrests. Explainable AI (XAI) methods—Grad-CAM, SHAP, Integrated Gradients—generate visual attributions to explain verification decisions, but these explanations lack scientific validity: there exists no mechanism to test whether an explanation is correct or incorrect. Following Popper's falsifiability criterion, we argue that explanations must make testable, refutable predictions about model behavior. We introduce the first falsifiability framework for attribution methods in face verification, reformulating attributions as counterfactual predictions on unit hypersphere embeddings. Our contributions include: (1) a theorem establishing necessary and sufficient conditions for falsifiable attributions (differential geodesic distance predictions with statistical separation), (2) a gradient-based algorithm for generating minimal counterfactuals respecting non-Euclidean geometry, and (3) computational complexity analysis proving $O(K \cdot T \cdot D)$ tractability. Unlike prior work adapting classification XAI to verification, our framework is purpose-built for pairwise similarity on hypersphere embeddings, addressing the unique geometric challenges of metric learning spaces. This work provides a scientific foundation for validating explanations in high-stakes forensic applications.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Explainable AI, Face Verification, Attribution Methods, Counterfactual Reasoning, Falsifiability, Biometric Systems
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+% Section files
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_theory}
+\input{sections/04_method}
+
+\section{Experiments}
+\label{sec:experiments}
+
+\textbf{[PLACEHOLDER - To be added after experimental validation]}
+
+Expected contents:
+\begin{itemize}
+    \item Falsification rates for Grad-CAM, SHAP, LIME, IG on LFW dataset (1,000 images)
+    \item Separation margin $\Delta = \bar{d}_{\text{high}} - \bar{d}_{\text{low}}$ analysis
+    \item Attribute-based validation (CelebA: glasses, beards known to affect verification)
+    \item Model-agnostic evaluation (ArcFace vs CosFace)
+    \item Convergence analysis for Algorithm 1
+\end{itemize}
+
+\section{Discussion}
+\label{sec:discussion}
+
+\textbf{[PLACEHOLDER - To be written after results]}
+
+Expected contents: interpretation of findings, deployment thresholds for forensic contexts, limitations and generalization, future work on video-based verification and 3D faces.
+
+\section*{Acknowledgments}
+This work was supported by [REDACTED FOR BLIND REVIEW]. We thank [REDACTED] for valuable discussions.
+
+% Bibliography
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{picture.jpg}}]{Aaron W. Storey}
+(Student Member, IEEE) received the B.S. degree in computer science from [University], in [Year]. He is currently pursuing the Ph.D. degree in computer science with Clarkson University, Potsdam, NY, USA. His research interests include explainable artificial intelligence, face verification, and biometric systems.
+\end{IEEEbiography}
+
+\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{picture.jpg}}]{Masudul H. Imtiaz}
+(Member, IEEE) received the Ph.D. degree in computer science from [University], in [Year]. He is currently an Assistant Professor with the Department of Computer Science, Clarkson University, Potsdam, NY, USA. His research interests include machine learning, computer vision, and trustworthy AI systems.
+\end{IEEEbiography}
+
+\end{document}

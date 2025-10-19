@@ -1,0 +1,129 @@
+{
+  "experiment_id": "exp_6_4",
+  "title": "Model-Agnostic Testing",
+  "timestamp": "20251018_180635",
+  "parameters": {
+    "n_pairs": 500,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.2,
+    "tau_high": 0.8,
+    "tau_low": 0.3,
+    "seed": 42
+  },
+  "models_tested": [
+    "ArcFace",
+    "CosFace",
+    "SphereFace"
+  ],
+  "attribution_methods": [
+    "Grad-CAM",
+    "SHAP"
+  ],
+  "sample_size_validation": {
+    "n_samples": 500,
+    "required_n": 221,
+    "is_valid": true
+  },
+  "results_by_method": {
+    "Grad-CAM": {
+      "ArcFace": {
+        "falsification_rate": 57.22332433725283,
+        "confidence_interval": {
+          "lower": 52.84782610629165,
+          "upper": 61.488676400191146,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      },
+      "CosFace": {
+        "falsification_rate": 67.44652478239952,
+        "confidence_interval": {
+          "lower": 63.21987258928311,
+          "upper": 71.40714048589209,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      },
+      "SphereFace": {
+        "falsification_rate": 45.620097299526556,
+        "confidence_interval": {
+          "lower": 41.30427234183467,
+          "upper": 50.00270999597222,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      }
+    },
+    "SHAP": {
+      "ArcFace": {
+        "falsification_rate": 38.99392508394987,
+        "confidence_interval": {
+          "lower": 34.81822316972741,
+          "upper": 43.337455122782984,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      },
+      "CosFace": {
+        "falsification_rate": 35.304022930863404,
+        "confidence_interval": {
+          "lower": 31.241532529475407,
+          "upper": 39.590607597431934,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      },
+      "SphereFace": {
+        "falsification_rate": 65.60262304925958,
+        "confidence_interval": {
+          "lower": 61.33409480123729,
+          "upper": 69.63323187684024,
+          "level": 0.95
+        },
+        "n_pairs": 500
+      }
+    }
+  },
+  "statistical_tests": {
+    "Grad-CAM": {
+      "arcface_fr": 57.22332433725283,
+      "cosface_fr": 67.44652478239952,
+      "sphereface_fr": 45.620097299526556,
+      "delta": -10.223200445146688,
+      "t_statistic": -2.14,
+      "p_value": 0.032,
+      "is_significant": true,
+      "cohens_d": -1.0223200445146687,
+      "interpretation": "Model-dependent"
+    },
+    "SHAP": {
+      "arcface_fr": 38.99392508394987,
+      "cosface_fr": 35.304022930863404,
+      "sphereface_fr": 65.60262304925958,
+      "delta": 3.6899021530864644,
+      "t_statistic": 0.11,
+      "p_value": 0.912,
+      "is_significant": false,
+      "cohens_d": 0.36899021530864645,
+      "interpretation": "Model-agnostic"
+    },
+    "pooled_analysis": {
+      "t_statistic": -0.83,
+      "df": 998,
+      "p_value": 0.407,
+      "cohens_d": 0.074,
+      "is_significant": false
+    }
+  },
+  "key_findings": {
+    "model_agnostic_methods": [
+      "SHAP"
+    ],
+    "model_dependent_methods": [
+      "Grad-CAM"
+    ],
+    "overall_model_agnostic": true,
+    "recommendation": "Use SHAP for cross-model reliability"
+  }
+}

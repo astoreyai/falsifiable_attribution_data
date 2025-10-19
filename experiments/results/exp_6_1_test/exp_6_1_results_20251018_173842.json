@@ -1,0 +1,83 @@
+{
+  "experiment_id": "exp_6_1",
+  "title": "Falsification Rate Comparison of Attribution Methods",
+  "timestamp": "20251018_173842",
+  "parameters": {
+    "n_pairs": 50,
+    "K_counterfactuals": 50,
+    "theta_high": 0.7,
+    "theta_low": 0.2,
+    "tau_high": 0.8,
+    "tau_low": 0.3,
+    "epsilon_margin": 0.3,
+    "seed": 42
+  },
+  "sample_size_validation": {
+    "n_samples": 50,
+    "required_n": 221,
+    "is_valid": false
+  },
+  "results": {
+    "Grad-CAM": {
+      "falsification_rate": 45.90696581189734,
+      "confidence_interval": {
+        "lower": 32.88512913249913,
+        "upper": 59.512858816279326,
+        "level": 0.95
+      },
+      "n_samples": 50
+    },
+    "SHAP": {
+      "falsification_rate": 48.74301002280343,
+      "confidence_interval": {
+        "lower": 35.481127413740055,
+        "upper": 62.18425906588215,
+        "level": 0.95
+      },
+      "n_samples": 50
+    },
+    "LIME": {
+      "falsification_rate": 49.34724945743326,
+      "confidence_interval": {
+        "lower": 36.039392908532925,
+        "upper": 62.74825037442386,
+        "level": 0.95
+      },
+      "n_samples": 50
+    }
+  },
+  "statistical_tests": {
+    "Grad-CAM_vs_SHAP": {
+      "statistic": 0.040257648953301126,
+      "p_value": 0.8409776633987525,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.05680993925232536,
+      "alpha": 0.05
+    },
+    "Grad-CAM_vs_LIME": {
+      "statistic": 0.040257648953301126,
+      "p_value": 0.8409776633987525,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.0688970059338887,
+      "alpha": 0.05
+    },
+    "SHAP_vs_LIME": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.012087066681563341,
+      "alpha": 0.05
+    }
+  },
+  "key_findings": {
+    "best_method": "Grad-CAM",
+    "worst_method": "LIME",
+    "range": [
+      45.90696581189734,
+      49.34724945743326
+    ]
+  }
+}

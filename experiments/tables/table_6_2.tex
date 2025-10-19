@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Margin-Stratified Falsification Rate Analysis (Experiment 6.2)}
+\label{tab:margin_stratified_analysis}
+\begin{tabular}{lcccc}
+\toprule
+Stratum & Margin Range & FR (\%) & 95\% CI & $n$ \\
+\midrule
+Narrow & [0.0, 0.1] & 30.6 & [13.0, 56.6] & 14 \\
+Moderate & [0.1, 0.3] & 35.6 & [21.9, 52.1] & 35 \\
+Wide & [0.3, 0.5] & 44.3 & [29.4, 60.3] & 36 \\
+Very Wide & [0.5, 1.0] & 53.0 & [44.0, 61.9] & 115 \\
+\midrule
+\multicolumn{5}{l}{Spearman $\rho = 1.000$, $p < 0.000$} \\
+\multicolumn{5}{l}{Linear fit: FR = 29.5 + 32.4δ, $R^2 = 0.985$} \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+
+\footnotesize Note: FR increases monotonically with separation margin.
+Narrow margins (confident mismatches) are harder to falsify than wide margins (uncertain decisions).
+Linear regression shows strong positive correlation ($R^2 > 0.98$).
+\end{table}

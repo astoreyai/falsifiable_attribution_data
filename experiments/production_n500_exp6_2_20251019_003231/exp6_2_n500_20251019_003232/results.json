@@ -1,0 +1,83 @@
+{
+  "experiment": "Experiment 6.2 - REAL Separation Margin Analysis",
+  "timestamp": "20251019_003232",
+  "parameters": {
+    "n_pairs": 500,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.3,
+    "verification_threshold": 0.5,
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW (sklearn)",
+    "simulations": "ZERO - all margins and FRs computed from real data",
+    "gpu_accelerated": true
+  },
+  "strata_results": {
+    "Stratum 1 (Narrow)": {
+      "falsification_rate": 100.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 86.68077490609515,
+        "upper": 99.99999999999999,
+        "level": 0.95
+      },
+      "n_pairs": 25,
+      "margin_range": [
+        0.0,
+        0.1
+      ]
+    },
+    "Stratum 2 (Moderate)": {
+      "falsification_rate": 100.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 92.86524008666413,
+        "upper": 100.0,
+        "level": 0.95
+      },
+      "n_pairs": 50,
+      "margin_range": [
+        0.1,
+        0.3
+      ]
+    },
+    "Stratum 3 (Wide)": {
+      "falsification_rate": 100.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 92.86524008666413,
+        "upper": 100.0,
+        "level": 0.95
+      },
+      "n_pairs": 50,
+      "margin_range": [
+        0.3,
+        0.5
+      ]
+    }
+  },
+  "statistical_tests": {
+    "spearman_correlation": {
+      "rho": NaN,
+      "p_value": NaN,
+      "is_significant": false
+    },
+    "linear_regression": {
+      "equation": "FR = 100.0 + 0.0\u00d7\u03b4",
+      "slope": 0.0,
+      "intercept": 100.0,
+      "r_squared": NaN,
+      "p_value": NaN
+    },
+    "anova": {
+      "f_statistic": NaN,
+      "p_value": NaN
+    }
+  },
+  "key_findings": {
+    "correlation_direction": "negative",
+    "hypothesis_supported": false,
+    "recommendation": "moderate_margins"
+  }
+}

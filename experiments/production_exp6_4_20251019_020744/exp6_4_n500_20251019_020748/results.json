@@ -1,0 +1,68 @@
+{
+  "experiment": "Experiment 6.4 - REAL Model-Agnostic Testing",
+  "timestamp": "20251019_020748",
+  "parameters": {
+    "n_pairs": 500,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.3,
+    "device": "cuda",
+    "seed": 42,
+    "simulations": "ZERO - all values computed from real data",
+    "models": [
+      "FaceNet",
+      "ResNet-50",
+      "MobileNetV2"
+    ],
+    "attribution_methods": [
+      "Grad-CAM",
+      "SHAP"
+    ]
+  },
+  "results_by_method": {
+    "Grad-CAM": {
+      "FaceNet": {
+        "falsification_rate": 0.0,
+        "falsification_rate_std": 0.0,
+        "confidence_interval": {
+          "lower": 0.0,
+          "upper": 4.58181295355271,
+          "level": 0.95
+        },
+        "n_pairs": 80
+      },
+      "MobileNetV2": {
+        "falsification_rate": 0.0,
+        "falsification_rate_std": 0.0,
+        "confidence_interval": {
+          "lower": 0.0,
+          "upper": 9.641862859446366,
+          "level": 0.95
+        },
+        "n_pairs": 36
+      }
+    },
+    "SHAP": {}
+  },
+  "statistical_tests": {
+    "Grad-CAM": {
+      "model1": "FaceNet",
+      "model2": "MobileNetV2",
+      "fr1": 0.0,
+      "fr2": 0.0,
+      "delta": 0.0,
+      "t_statistic": NaN,
+      "p_value": NaN,
+      "is_significant": false,
+      "cohens_d": 0.0,
+      "interpretation": "Model-agnostic",
+      "n_pairs": 36
+    }
+  },
+  "key_findings": {
+    "model_agnostic_methods": [
+      "Grad-CAM"
+    ],
+    "model_dependent_methods": []
+  }
+}

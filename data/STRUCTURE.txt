@@ -1,0 +1,243 @@
+================================================================================
+DATA PACKAGE STRUCTURE
+================================================================================
+
+/home/aaron/projects/xai/
+│
+├── data/                           ← Python Package (fixes ModuleNotFoundError)
+│   │
+│   ├── __init__.py                 ← Package Initialization (178 bytes)
+│   │   └── Exports: VGGFace2Dataset, CelebADataset, all utilities
+│   │
+│   ├── datasets.py                 ← VGGFace2 Loader (244 lines)
+│   │   ├── Class: VGGFace2Dataset
+│   │   │   ├── __init__(root_dir, split, n_pairs, transform, seed)
+│   │   │   ├── __getitem__() → {'img1', 'img2', 'label'}
+│   │   │   └── get_dataset_statistics() → dict
+│   │   └── Function: get_default_transforms()
+│   │
+│   ├── celeba_dataset.py           ← CelebA Loader (315 lines)
+│   │   ├── Class: CelebADataset
+│   │   │   ├── ATTRIBUTES = [40 attribute names]
+│   │   │   ├── __init__(root_dir, split, transform, attributes, n_samples)
+│   │   │   ├── __getitem__() → (image, attributes)
+│   │   │   ├── get_attribute_names() → list
+│   │   │   ├── get_dataset_statistics() → dict
+│   │   │   └── get_images_with_attribute(attr, value) → indices
+│   │   └── Functions: _find_dataset_root(), _load_attributes(), etc.
+│   │
+│   ├── utils.py                    ← Utilities (355 lines)
+│   │   ├── Transforms:
+│   │   │   ├── get_default_transforms(size, normalize, augment)
+│   │   │   ├── get_insightface_transforms(size=112)
+│   │   │   ├── get_facenet_transforms(size=160)
+│   │   │   └── get_vggface_transforms(size=224)
+│   │   ├── Collate:
+│   │   │   ├── collate_verification_pairs(batch)
+│   │   │   └── collate_attribute_batch(batch)
+│   │   ├── Metrics:
+│   │   │   ├── compute_embedding_statistics(embeddings)
+│   │   │   ├── compute_verification_metrics(similarities, labels)
+│   │   │   ├── normalize_embeddings(embeddings)
+│   │   │   ├── cosine_similarity(emb1, emb2)
+│   │   │   └── euclidean_distance(emb1, emb2)
+│   │   └── Utilities:
+│   │       └── split_dataset_indices(n_samples, ratios)
+│   │
+│   ├── README.md                   ← Full Documentation (280 lines)
+│   ├── QUICK_REFERENCE.md          ← Cheat Sheet
+│   └── STRUCTURE.txt               ← This File
+│
+├── examples/
+│   └── dataset_usage.py            ← Usage Examples
+│
+└── IMPLEMENTATION_SUMMARY.md       ← Implementation Details
+
+================================================================================
+USAGE PATTERNS
+================================================================================
+
+IMPORT PATTERN:
+    from data import VGGFace2Dataset, CelebADataset
+    from data import get_insightface_transforms
+    from data import collate_verification_pairs
+
+VGGFACE2 PATTERN:
+    dataset = VGGFace2Dataset('/datasets/vggface2', split='test',
+                              transform=get_insightface_transforms(), n_pairs=200)
+    loader = DataLoader(dataset, batch_size=16, collate_fn=collate_verification_pairs)
+    img1, img2, labels = next(iter(loader))
+
+CELEBA PATTERN:
+    dataset = CelebADataset('/datasets/celeba', split='test',
+                            transform=get_default_transforms(224), n_samples=1000)
+    loader = DataLoader(dataset, batch_size=32, collate_fn=collate_attribute_batch)
+    images, attributes = next(iter(loader))
+
+================================================================================
+DATA FLOW
+================================================================================
+
+VGGFace2:
+    VGGFace2Dataset
+        ↓
+    _load_dataset_structure()  → identity_to_images: dict
+        ↓
+    _generate_pairs()          → pairs: [(img1, img2, label), ...]
+        ↓
+    __getitem__(idx)           → {'img1': Tensor, 'img2': Tensor, 'label': int}
+        ↓
+    DataLoader + collate_fn    → (batch_img1, batch_img2, batch_labels)
+
+CelebA:
+    CelebADataset
+        ↓
+    _load_attributes()         → attr_df: DataFrame with 40 columns
+        ↓
+    _load_split()              → (image_paths, attributes)
+        ↓
+    __getitem__(idx)           → (image: Tensor, attributes: Tensor)
+        ↓
+    DataLoader + collate_fn    → (batch_images, batch_attributes)
+
+================================================================================
+KEY FEATURES
+================================================================================
+
+✓ Proper Python Package Structure
+  - Fixes ModuleNotFoundError
+  - Clean imports: from data import ...
+  - Proper __init__.py with exports
+
+✓ Automatic Dataset Detection
+  - Checks multiple common paths
+  - /datasets/, ~/datasets/, /data/, ~/data/
+  - Graceful error messages with download URLs
+
+✓ Flexible Configuration
+  - Multiple image sizes (112, 160, 224)
+  - Optional augmentation
+  - Attribute selection for CelebA
+  - Sample limiting
+
+✓ Research-Ready
+  - PyTorch DataLoader compatible
+  - Proper batching with collate functions
+  - Verification metrics included
+  - Embedding utilities
+
+✓ Well-Documented
+  - README.md with full documentation
+  - QUICK_REFERENCE.md for common patterns
+  - Docstrings in all classes/functions
+  - Usage examples
+
+================================================================================
+STATISTICS & REPORTING
+================================================================================
+
+VGGFace2.get_dataset_statistics():
+    {
+        'n_images': int,
+        'n_identities': int,
+        'images_per_identity_mean': float,
+        'images_per_identity_std': float,
+        'images_per_identity_min': int,
+        'images_per_identity_max': int,
+        'n_pairs': int,
+        'n_genuine_pairs': int,
+        'n_impostor_pairs': int,
+        'genuine_ratio': float
+    }
+
+CelebADataset.get_dataset_statistics():
+    {
+        'n_images': int,
+        'n_attributes': int,
+        'split': str,
+        'attribute_statistics': {
+            'Male': {
+                'positive_count': int,
+                'negative_count': int,
+                'positive_ratio': float
+            },
+            ...
+        }
+    }
+
+================================================================================
+TRANSFORM SPECIFICATIONS
+================================================================================
+
+InsightFace/ArcFace:    112x112, normalize [-1, 1], RGB
+FaceNet:                160x160, normalize [-1, 1], RGB
+VGGFace:                224x224, ImageNet normalization, RGB
+Default:                Customizable, optional augmentation
+
+Augmentations (if enabled):
+    - Random horizontal flip (p=0.5)
+    - Color jitter (brightness, contrast, saturation, hue)
+    - Random rotation (±5 degrees)
+
+================================================================================
+DATASET REQUIREMENTS
+================================================================================
+
+VGGFace2:
+    URL: http://www.robots.ox.ac.uk/~vgg/data/vgg_face2/
+    Size: ~37 GB (train), ~2 GB (test)
+    Structure:
+        vggface2/
+        ├── train/
+        │   ├── n000001/
+        │   │   ├── 0001_01.jpg
+        │   │   └── ...
+        │   └── ...
+        └── test/
+            └── ...
+
+CelebA:
+    URL: http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+    Size: ~1.4 GB
+    Structure:
+        celeba/
+        ├── img_align_celeba/
+        │   ├── 000001.jpg
+        │   └── ...
+        ├── list_attr_celeba.txt
+        └── list_eval_partition.txt
+
+================================================================================
+VERIFICATION METRICS
+================================================================================
+
+compute_verification_metrics(similarities, labels):
+    Input:
+        similarities: np.array of similarity scores
+        labels: np.array of ground truth (1=genuine, 0=impostor)
+
+    Output:
+        {
+            'tpr': array of true positive rates,
+            'fpr': array of false positive rates,
+            'accuracy': array of accuracies,
+            'thresholds': array of threshold values,
+            'best_threshold': optimal threshold,
+            'best_tpr': TPR at optimal threshold,
+            'best_fpr': FPR at optimal threshold,
+            'best_accuracy': accuracy at optimal threshold
+        }
+
+================================================================================
+FILE SIZES
+================================================================================
+
+data/__init__.py          178 bytes   (7 lines)
+data/datasets.py          7.9 KB      (244 lines)
+data/celeba_dataset.py    11 KB       (315 lines)
+data/utils.py             10 KB       (355 lines)
+data/README.md            ~8 KB       (280 lines)
+
+Total Package: ~37 KB, 1201 lines
+
+================================================================================

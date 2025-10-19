@@ -1,0 +1,107 @@
+\section{Compliance Template: Practical Implementation}
+
+To facilitate systematic compliance assessment, we provide a template that practitioners can use to document XAI validation. The template is organized around the seven evidentiary requirements, with structured reporting fields for each.
+
+\subsection{Template Structure}
+
+The template structure described below can be adapted for systematic compliance assessment. We outline the key components and demonstrate usage through a realistic example based on empirical findings in the computer science literature.
+
+\subsubsection{System Information Section}
+
+The template begins by documenting basic system details: the face verification model (e.g., ArcFace-ResNet50), the XAI method (e.g., Grad-CAM), validation date, and responsible parties. This establishes the scope of assessment.
+
+\subsubsection{Requirement Sections}
+
+For each of the seven requirements, the template provides:
+
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{Evidence fields}: Specific metrics required (e.g., correlation $\rho$, p-values, confidence intervals)
+    \item \textbf{Validation method}: Brief description of how evidence was obtained
+    \item \textbf{Threshold comparison}: Pass/Fail determination based on specified criteria
+    \item \textbf{Interpretation}: Plain-language summary of what the results mean
+\end{itemize}
+
+This structure ensures systematic documentation while remaining accessible to non-technical stakeholders like legal counsel and oversight boards.
+
+\subsubsection{Overall Compliance Assessment}
+
+The template concludes with an overall assessment:
+
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{Requirements passed}: Summary count (X/7)
+    \item \textbf{Compliance status}: Full compliance (7/7), partial compliance (3--6/7), or non-compliant ($<$3/7)
+    \item \textbf{Deployment recommendation}: Approved, approved with restrictions, or not approved
+    \item \textbf{Limitations}: Documented caveats that constrain interpretation
+    \item \textbf{Revalidation schedule}: Triggers and timeline for future assessment
+\end{itemize}
+
+\subsection{Example: Grad-CAM on ArcFace}
+
+\textbf{Methodological Note}: The validation results presented below synthesize typical findings from published XAI evaluation studies~\cite{adebayo2018sanity,kindermans2019reliability}. While not from a single validation exercise, the reported metrics (e.g., $\rho=0.68$, 76\% accuracy, Cohen's $d=0.72$) reflect documented performance ranges for Grad-CAM on face verification tasks. We debated whether to present an idealized system passing 7/7 requirements or a realistic 3/7 scenario. We chose the latter—while less flattering to current methods, it better serves practitioners facing actual deployment decisions. The example demonstrates both how practitioners should document validation results and what typical outcomes look like for current methods.
+
+\textbf{System}: ArcFace-ResNet50 with Grad-CAM explanations
+
+\textbf{Validation Dataset}: 1,000 pairs from Labeled Faces in the Wild (LFW)
+
+\textbf{Results Summary}: The system passed 3/7 requirements:
+
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{PASS}: Testability ($p < 0.001$, Cohen's $d = 0.72$)
+    \item \textbf{PASS}: Known error rates (91\% CI coverage, 5 failure modes documented)
+    \item \textbf{PASS}: Comprehensibility (83\% correct interpretation by forensic analysts)
+    \item \textbf{FAIL}: Meaningful information ($\rho = 0.68$, below 0.70 threshold)
+    \item \textbf{FAIL}: Appropriate accuracy (76\% ground truth accuracy, below 80\% threshold)
+    \item \textbf{FAIL}: Standards (no pre-registration of thresholds)
+    \item \textbf{FAIL}: Human oversight (AUC = 0.71, below 0.75 threshold)
+\end{itemize}
+
+\textbf{Deployment Recommendation}: Approved with restrictions
+
+The system demonstrates testability and has documented error rates, making it suitable for investigative use under supervision. However, failures on faithfulness, accuracy, and oversight metrics preclude use as primary evidence in legal proceedings.
+
+\textbf{Recommended Restrictions}:
+\begin{enumerate}[itemsep=2pt]
+    \item Use only for investigative leads, NOT as primary evidence in court
+    \item Require manual expert review by trained forensic examiners for ALL cases
+    \item Exclude known failure mode conditions: profile faces, low resolution, occlusion, dark-skinned females, borderline scores
+    \item Provide operators with automated warnings when cases fall into failure modes
+    \item Maintain audit trail for quality assurance review
+\end{enumerate}
+
+\textbf{Known Failure Modes} (where faithfulness falls below $\rho = 0.70$):
+\begin{itemize}[itemsep=2pt]
+    \item Profile faces (pose $>45^\circ$): $\rho = 0.54$
+    \item Low resolution ($<100$px interocular distance): $\rho = 0.59$
+    \item Occlusion $>30\%$ of face: $\rho = 0.62$
+    \item Dark-skinned females: $\rho = 0.64$
+    \item Scores near threshold (0.45--0.55): $\rho = 0.61$
+\end{itemize}
+
+Overall rejection rate: 23\% of LFW pairs fall into documented failure modes and should not receive explanations without expert review.
+
+\subsection{Interpretation Guidance}
+
+\subsubsection{Partial Compliance Scenarios}
+
+Systems passing some but not all requirements face nuanced deployment decisions:
+
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{3--4/7 PASS}: May be appropriate for investigative leads but not primary evidence
+    \item \textbf{5--6/7 PASS}: May be appropriate for operational use with documented limitations
+    \item \textbf{7/7 PASS}: Meets minimal evidence threshold for full forensic deployment
+\end{itemize}
+
+Important caveat: passing all seven requirements establishes \emph{minimal} evidence for responsible deployment, not a guarantee of perfection. Ongoing monitoring, incident reporting, and periodic revalidation remain essential.
+
+\subsubsection{Failure Mode Handling}
+
+If a system fails specific requirements, targeted remediation may be possible:
+
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{Fail Meaningful Information / Accuracy}: Try different XAI method (e.g., switch from SHAP to Integrated Gradients)
+    \item \textbf{Fail Error Rates}: Conduct stratified analysis to identify conditions where performance degrades
+    \item \textbf{Fail Standards}: Establish pre-registered protocol for future validation studies
+    \item \textbf{Fail Oversight}: Develop calibrated confidence scores using conformal prediction or Bayesian methods
+\end{itemize}
+
+The template provides a systematic pathway for identifying deficiencies and targeting improvements—transforming compliance from a binary pass/fail into a continuous quality improvement process.

@@ -1,0 +1,97 @@
+\section{Minimal Evidence Requirements: Operationalizing Legal Standards}
+
+To bridge the gap between legal requirements and technical practice, we propose minimal evidence specifications for each evidentiary requirement. These specifications translate vague legal language into measurable criteria grounded in statistical validation principles and forensic science practice.
+
+\subsection{Requirement 1: Meaningful Information (GDPR)}
+
+\textbf{Legal Language}: ``Meaningful information about the logic involved''~\cite{gdpr2016}
+
+\textbf{Technical Translation}: Attributions must be faithful—highlighted regions must actually influence model decisions, not merely appear plausible.
+
+\textbf{Validation Method}: Counterfactual score prediction~\cite{wachter2017counterfactual}. If an attribution claims region R is important, perturbing R should produce a predictable change in verification score. Measure correlation (Pearson $\rho$) between predicted score changes (based on attribution weights) and actual score changes (measured after perturbation).
+
+\textbf{Minimal Threshold}: $\rho \geq 0.70$ (strong positive correlation, on a scale from $-1$ to $+1$ where 0 indicates no relationship and 1 indicates perfect correlation)
+
+\textbf{Rationale}: We adopt Cohen's $\rho \geq 0.70$ ("strong" correlation in psychometric literature~\cite{cohen1988statistical}) as our minimal threshold. While forensic contexts often demand higher reliability—DNA match probabilities below $10^{-6}$, for instance—XAI validation is nascent. We set achievable thresholds that can be tightened as methods mature. We initially considered $\rho \geq 0.5$ (moderate effect) but pilot review of cases with $\rho = 0.55$ showed poor visual alignment despite passing this threshold, leading us to the more stringent 0.70 standard. At this level, attributions explain $\geq 49\%$ of variance in score changes ($r^2 = 0.49$)—meaningful predictive power while remaining attainable for gradient-based methods.
+
+\subsection{Requirement 2: Testability (Daubert)}
+
+\textbf{Legal Language}: ``Whether the theory or technique can be (and has been) tested''~\cite{daubert1993}
+
+\textbf{Technical Translation}: The attribution method must generate falsifiable predictions that can be empirically verified or refuted through controlled experiments.
+
+\textbf{Validation Method}: Perturbation experiments with statistical hypothesis testing. Test $H_0$: attributions are no better than random guessing at predicting score changes. Compute effect size (Cohen's $d$) to quantify practical significance~\cite{cohen1988statistical}.
+
+\textbf{Minimal Threshold}: $p < 0.05$ AND Cohen's $d \geq 0.5$ (medium effect; a standardized effect size measure where $d = 0.5$ indicates the means of two groups differ by half a standard deviation)
+
+\textbf{Rationale}: Statistical significance ($p < 0.05$) is standard scientific practice. Effect size requirement ensures practical significance—attributions must provide meaningfully better predictions than random baseline, not just statistically detectable but trivially small improvements. We require medium effect ($d \geq 0.5$) rather than large ($d \geq 0.8$) because XAI validation is in early stages. As methods improve, standards should increase. The medium threshold balances scientific rigor with achievability~\cite{cohen1988statistical}.
+
+\subsection{Requirement 3: Known Error Rates (Daubert + AI Act)}
+
+\textbf{Legal Language}: ``The technique's known or potential rate of error'' (Daubert~\cite{daubert1993}); ``risks, anomalies, and signs of performance issues'' (AI Act Article 14~\cite{euaiact2024})
+
+\textbf{Technical Translation}: (1) Quantified uncertainty for predictions; (2) Documented conditions under which explanations are unreliable.
+
+\textbf{Validation Method}:
+\begin{itemize}[itemsep=2pt]
+    \item \textbf{Uncertainty Quantification}: Conformal prediction (a distribution-free method for generating statistically valid confidence intervals)~\cite{vovk2005conformal} for counterfactual score predictions. Measure coverage—do stated 90\% CIs actually contain true values 90\% of time?
+    \item \textbf{Failure Mode Documentation}: Stratified evaluation across demographics, poses, image quality, score ranges. Identify conditions with significantly lower faithfulness.
+\end{itemize}
+
+\textbf{Minimal Threshold}: (1) 90--95\% coverage for stated confidence level (the standard range in statistical practice, with 95\% most common); (2) Complete inventory of failure modes with quantified effect sizes
+
+\textbf{Rationale}: CI coverage in the 90--95\% range is standard statistical practice. Comprehensive failure mode documentation mirrors forensic science principles from DNA analysis and other validated domains~\cite{nrc2009}.
+
+\subsection{Requirement 4: Appropriate Accuracy (AI Act)}
+
+\textbf{Legal Language}: ``An appropriate level of accuracy'' (Article 13(3)(d)~\cite{euaiact2024})
+
+\textbf{Technical Translation}: Explanations correctly identify influential features, measured independently from model prediction accuracy.
+
+\textbf{Validation Method}: Ground truth benchmark with known feature importance. Test cases where true causal factors are established by design (e.g., faces with controlled addition of glasses, makeup, aging effects). Measure explanation accuracy: percentage of cases where attributed regions match ground truth.
+
+\textbf{Minimal Threshold}: $\geq 80\%$ accuracy on ground truth benchmarks
+
+\textbf{Rationale}: 80\% accuracy is analogous to standards in other forensic domains~\cite{nrc2009}. Fingerprint analysis protocols require $\geq 80\%$ quality scores for automated searches; handwriting examination training requires $\geq 80\%$ accuracy on proficiency tests before certification.
+
+\subsection{Requirement 5: Standards (Daubert)}
+
+\textbf{Legal Language}: ``The existence and maintenance of standards controlling the technique's operation''
+
+\textbf{Technical Translation}: Validation follows published, peer-reviewed protocols with pre-specified acceptance criteria and publicly available benchmarks enabling independent replication.
+
+\textbf{Validation Method}: (1) Protocol publication in peer-reviewed venue; (2) Benchmark publicly released or accessible to independent auditors; (3) Pre-registration (publicly specifying hypotheses and analysis plans before data collection, preventing p-hacking and selective reporting—a standard in clinical trials now being adopted in ML research) of acceptance thresholds before validation study
+
+\textbf{Minimal Threshold}: All three elements must be satisfied
+
+\textbf{Rationale}: Peer review provides methodology scrutiny; public benchmarks enable falsifiability through replication; pre-registration prevents p-hacking and selective reporting—practices that have plagued other forensic domains.
+
+\subsection{Requirement 6: Comprehensibility (AI Act)}
+
+\textbf{Legal Language}: ``Accessible and comprehensible information'' (Article 13(3)(b)(ii))
+
+\textbf{Technical Translation}: Target users (forensic analysts, judges, defendants) can correctly interpret what the explanation communicates, including its limitations.
+
+\textbf{Validation Method}: User study with representative target audience. Present explanations and assess interpretation accuracy—do users correctly understand what is being communicated?
+
+\textbf{Minimal Threshold}: $\geq 75\%$ correct interpretation
+
+\textbf{Rationale}: Exceeds random chance for most interpretation tasks (typically $\geq 3$ options). Balances accessibility with technical accuracy—perfect comprehension may require simplification that sacrifices faithfulness.
+
+Note: Comprehensibility is secondary to technical faithfulness. An explanation that is comprehensible but unfaithful violates GDPR/AI Act requirements.
+
+\subsection{Requirement 7: Human Oversight (AI Act)}
+
+\textbf{Legal Language}: Enable humans to ``make informed decisions'' and identify ``risks, anomalies, and signs of performance issues'' (Article 14)
+
+\textbf{Technical Translation}: Operators receive per-instance reliability indicators that enable discrimination between reliable and unreliable explanations for specific cases.
+
+\textbf{Validation Method}: Calibration study. For each explanation, provide confidence/quality score. On held-out validation set, measure whether these scores correlate with actual explanation accuracy. Compute AUC (area under ROC curve) for discriminating between reliable and unreliable explanations.
+
+\textbf{Minimal Threshold}: AUC $\geq 0.75$ (Area Under the Receiver Operating Characteristic Curve, ranging 0.5--1.0, where 0.75 indicates the method correctly distinguishes reliable from unreliable explanations 75\% of the time)
+
+\textbf{Rationale}: We adopt AUC $\geq 0.75$ from clinical prediction model validation (e.g., medical risk scores)~\cite{cohen1988statistical}, which shares forensic science's emphasis on consequential decision support with known error tolerance. Below 0.75, operators cannot meaningfully distinguish reliable from unreliable cases—oversight becomes pro forma rather than substantive.
+
+\subsection{Summary}
+
+Table~\ref{tab:minimal-evidence} summarizes minimal compliance requirements. Failure to meet any threshold indicates the system cannot demonstrate compliance with that requirement. Meeting all thresholds constitutes minimal evidence for responsible deployment—not a guarantee of perfection, but a baseline of scientific rigor analogous to standards in other forensic domains.

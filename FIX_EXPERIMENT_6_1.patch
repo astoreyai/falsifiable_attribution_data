@@ -1,0 +1,90 @@
+--- a/experiments/run_final_experiment_6_1.py
++++ b/experiments/run_final_experiment_6_1.py
+@@ -390,6 +390,19 @@ def run_final_experiment_6_1(
+                         device=device
+                     )
+
++                    # Validate result schema (prevent silent failures)
++                    required_keys = ['falsification_rate', 'is_falsified', 'd_high', 'd_low']
++                    missing_keys = [k for k in required_keys if k not in falsification_result]
++                    if missing_keys:
++                        raise ValueError(
++                            f"Invalid falsification result for {method_name} pair {pair_idx}\n"
++                            f"  Missing keys: {missing_keys}\n"
++                            f"  Available keys: {list(falsification_result.keys())}"
++                        )
++
++                    # Validate falsification_rate is in expected range
++                    if not (0 <= falsification_result['falsification_rate'] <= 100):
++                        logger.warning(f"Unusual FR value for {method_name} pair {pair_idx}: {falsification_result['falsification_rate']}")
++
+                     # Store results
+                     results[method_name]['falsification_tests'].append(falsification_result)
+                     results[method_name]['attributions'].append({
+@@ -419,7 +432,19 @@ def run_final_experiment_6_1(
+             continue
+
+         # Extract falsification rates
+-        frs = [t['falsified'] for t in tests if 'falsified' in t]
++        # BUG FIX: Changed from t['falsified'] to t['falsification_rate']
++        # The falsification_test() function returns 'falsification_rate', not 'falsified'
++        frs = [t['falsification_rate'] for t in tests if 'falsification_rate' in t]
++
++        # Validate extraction worked
++        if len(frs) != len(tests):
++            logger.error(
++                f"CRITICAL: Failed to extract all falsification rates for {method_name}\n"
++                f"  Expected {len(tests)} rates, got {len(frs)}\n"
++                f"  Available keys in first test: {list(tests[0].keys()) if tests else 'N/A'}"
++            )
++            # Continue anyway with what we have (better than nothing)
++            # but log the issue
+
+         if len(frs) == 0:
+             logger.warning(f"No falsification rates for {method_name}")
+@@ -427,8 +452,9 @@ def run_final_experiment_6_1(
+
+         # Compute statistics (REAL - no simulation)
+-        fr_mean = np.mean(frs) * 100
+-        fr_std = np.std(frs) * 100
++        # BUG FIX: Removed * 100 because falsification_rate is already a percentage (0-100)
++        fr_mean = np.mean(frs)
++        fr_std = np.std(frs)
+         ci_lower, ci_upper = compute_confidence_interval(fr_mean, len(frs))
+
+         summary_results[method_name] = {
+@@ -445,6 +471,19 @@ def run_final_experiment_6_1(
+
+         logger.info(f"  {method_name}: FR = {fr_mean:.2f}% ± {fr_std:.2f}% (95% CI: [{ci_lower:.2f}, {ci_upper:.2f}])")
+
++    # Validate we generated results for all methods
++    if len(summary_results) == 0:
++        raise RuntimeError(
++            f"CRITICAL: No summary results generated!\n"
++            f"  Processed {len(pairs)} pairs with {len(attribution_methods)} methods\n"
++            f"  But summary_results is empty. Check aggregation logic and error logs."
++        )
++
++    if len(summary_results) < len(attribution_methods):
++        logger.warning(
++            f"Only {len(summary_results)}/{len(attribution_methods)} methods produced results\n"
++            f"  Missing: {set(attribution_methods.keys()) - set(summary_results.keys())}"
++        )
++
+     # 6. Statistical significance testing
+     logger.info(f"\n[6/6] Running statistical tests...")
+
+@@ -470,6 +509,13 @@ def run_final_experiment_6_1(
+             logger.info(f"    Significant: {sig_test.get('significant', 'N/A')}")
+
+     # Save results
++    # Final validation before saving
++    if len(statistical_tests) == 0 and len(summary_results) > 1:
++        logger.warning(
++            f"No statistical tests computed despite having {len(summary_results)} methods\n"
++            f"  Expected pairwise comparisons. Check statistical test logic."
++        )
++
+     logger.info(f"\n💾 Saving results to {output_path}...")
+
+     final_results = {

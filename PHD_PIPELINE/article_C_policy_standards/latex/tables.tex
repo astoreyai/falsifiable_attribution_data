@@ -1,0 +1,107 @@
+\newpage
+\section*{Tables}
+
+\begin{table}[h]
+\centering
+\caption{Regulatory Requirements vs. Current XAI Practice}
+\label{tab:requirements-gap}
+\footnotesize
+\begin{tabular}{@{}p{3.5cm}p{3cm}p{2.5cm}p{4cm}@{}}
+\toprule
+\textbf{Requirement} & \textbf{Current Practice} & \textbf{Gap} & \textbf{Impact} \\
+\midrule
+\textbf{Meaningful Information} (GDPR Art. 22) &
+Visual saliency maps (Grad-CAM, SHAP) produced without validation &
+No verification that highlighted regions actually influenced decision &
+Individuals cannot effectively contest algorithmic decisions; explanations may be post-hoc rationalizations \\
+\addlinespace
+\textbf{Appropriate Transparency \& Accuracy} (AI Act Art. 13) &
+Documentation describes XAI method used &
+No evidence that explanations are \emph{accurate} representations of model reasoning &
+Operators may misinterpret unreliable explanations, leading to incorrect override decisions \\
+\addlinespace
+\textbf{Testability} (Daubert) &
+XAI methods produce outputs but lack falsifiable hypotheses &
+Explanations cannot be empirically tested or refuted through controlled experiments &
+Fails judicial admissibility standards in U.S. courts; cannot demonstrate scientific validity \\
+\addlinespace
+\textbf{Known Error Rates} (Daubert; AI Act Art. 14) &
+Error rates reported for face verification accuracy, not for explanation faithfulness &
+No quantified failure modes of attribution methods; investigators don't know when explanations are unreliable &
+Cannot assess reliability of specific explanation; may trust misleading explanations in critical cases \\
+\addlinespace
+\textbf{Standards} (Daubert) &
+Ad-hoc deployment of XAI methods without published protocols or acceptance thresholds &
+No consensus standards for when explanation quality is sufficient for forensic use &
+Inconsistent practices across agencies; no basis for inter-agency comparison or legal challenges \\
+\addlinespace
+\textbf{Appropriate Accuracy} (AI Act Art. 13) &
+Verification models report accuracy metrics, but explanation accuracy is assumed, not measured &
+Attribution methods may systematically misidentify important features (studies show 40--69\% accuracy) &
+High model accuracy does not guarantee explanation reliability; false confidence in forensic applications \\
+\addlinespace
+\textbf{Human Oversight} (AI Act Art. 14) &
+Operators review XAI outputs without tools to assess explanation quality &
+Operators lack meta-information about explanation reliability for specific cases &
+Cannot distinguish reliable from unreliable explanations; oversight becomes pro forma rather than substantive \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+\begin{landscape}
+\begin{table}[h]
+\centering
+\caption{Minimal Evidence Requirements for XAI Compliance}
+\label{tab:minimal-evidence}
+\scriptsize
+\begin{tabular}{@{}p{3cm}p{3.5cm}p{3cm}p{2.5cm}p{3cm}@{}}
+\toprule
+\textbf{Requirement} & \textbf{Minimal Technical Evidence} & \textbf{Validation Method} & \textbf{Acceptance Threshold} & \textbf{Reporting Format} \\
+\midrule
+\textbf{Meaningful Information} (GDPR Art. 22) &
+Faithful attribution map where highlighted regions actually influence model decision &
+Counterfactual score prediction: $\Delta s_{\text{predicted}}$ vs. $\Delta s_{\text{actual}}$ &
+Pearson $\rho \geq 0.70$ between predicted and actual score changes &
+``Attribution faithfulness: $\rho = X.XX$ [95\% CI: X.XX--X.XX]'' \\
+\addlinespace
+\textbf{Testability} (Daubert) &
+Falsifiable hypothesis about feature importance that can be empirically tested &
+Perturbation experiments with statistical hypothesis testing &
+$p < 0.05$ for $H_0$: attribution is random guessing; Cohen's $d \geq 0.5$ &
+``Testability: $\chi^2 = XX$, $p < 0.001$; attributions significantly predict score changes'' \\
+\addlinespace
+\textbf{Known Error Rates} (Daubert; AI Act Art. 14) &
+(1) Confidence interval calibration for predictions; (2) Documented failure modes &
+Conformal prediction for CI coverage; stratified evaluation by demographics/conditions &
+(1) 90--95\% coverage for stated CIs; (2) Complete failure mode documentation &
+``CI calibration: 92\% coverage at 90\% CI. Known failure modes: [list]. Rejection rate: X\%'' \\
+\addlinespace
+\textbf{Appropriate Accuracy} (AI Act Art. 13) &
+Quantified explanation accuracy independent of model accuracy &
+Ground truth test cases where true feature importance is known &
+Explanation accuracy $\geq 80\%$ on ground truth benchmarks &
+``Explanation accuracy: 85\% correct feature identification [benchmark: controlled perturbation suite]'' \\
+\addlinespace
+\textbf{Standards} (Daubert) &
+Pre-registered validation protocol with published acceptance criteria &
+Peer-reviewed validation study using standardized benchmark &
+Methods published in peer-reviewed venue; benchmark publicly available &
+``Validation protocol: [citation]. Benchmark: [name]. Results: [metrics]'' \\
+\addlinespace
+\textbf{Comprehensibility} (AI Act Art. 13) &
+Explanation + uncertainty quantification + limitations documentation &
+User study or expert evaluation of comprehensibility (secondary to technical faithfulness) &
+Target audience can correctly interpret explanation's meaning and limitations $\geq 75\%$ of time &
+``Comprehensibility: XX\% correct interpretation by [target audience] in controlled study'' \\
+\addlinespace
+\textbf{Human Oversight} (AI Act Art. 14) &
+Meta-level reliability indicator for each explanation (per-instance quality score) &
+Prediction confidence calibrated to actual accuracy on held-out validation set &
+Operator can discriminate between reliable/unreliable explanations with AUC $\geq 0.75$ &
+``Reliability indicator: AUC = 0.XX for predicting explanation error'' \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{landscape}

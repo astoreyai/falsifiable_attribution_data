@@ -1,0 +1,40 @@
+{
+  "experiment": "Experiment 6.2 - REAL Separation Margin Analysis",
+  "timestamp": "20251018_235620",
+  "parameters": {
+    "n_pairs": 500,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.3,
+    "verification_threshold": 0.5,
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW (sklearn)",
+    "simulations": "ZERO - all margins and FRs computed from real data",
+    "gpu_accelerated": true
+  },
+  "strata_results": {},
+  "statistical_tests": {
+    "spearman_correlation": {
+      "rho": null,
+      "p_value": null,
+      "is_significant": null
+    },
+    "linear_regression": {
+      "equation": null,
+      "slope": null,
+      "intercept": null,
+      "r_squared": null,
+      "p_value": null
+    },
+    "anova": {
+      "f_statistic": null,
+      "p_value": null
+    }
+  },
+  "key_findings": {
+    "correlation_direction": "unknown",
+    "hypothesis_supported": null,
+    "recommendation": "unknown"
+  }
+}

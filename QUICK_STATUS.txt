@@ -1,0 +1,76 @@
+================================================================================
+  DISSERTATION VALIDATION EXPERIMENTS - QUICK STATUS
+================================================================================
+
+LAUNCH TIME: October 19, 2025, 12:32 AM CDT
+STATUS: ALL 4 EXPERIMENTS RUNNING
+
+--------------------------------------------------------------------------------
+EXPERIMENT PIDS (use for monitoring/killing):
+--------------------------------------------------------------------------------
+Experiment 6.2 (Margin):        PID 1848475
+Experiment 6.3 (Attribute):     PID 1849124
+Experiment 6.4 (Model-Agnostic): PID 1848607
+Experiment 6.5 (Convergence):   PID 1849191
+
+--------------------------------------------------------------------------------
+QUICK COMMANDS:
+--------------------------------------------------------------------------------
+# Check all running experiments:
+ps aux | grep "run_real_experiment_6_[2-5]" | grep -v grep
+
+# Run monitoring script:
+/home/aaron/projects/xai/scripts/monitor_experiments.sh
+
+# Auto-refresh monitoring (every 60 seconds):
+watch -n 60 /home/aaron/projects/xai/scripts/monitor_experiments.sh
+
+# Check GPU:
+nvidia-smi
+
+# Tail individual logs:
+tail -f logs/exp6_2_n500.log
+tail -f logs/exp6_3_n300.log
+tail -f logs/exp6_4_n500.log
+tail -f logs/exp6_5_convergence.log
+
+# Kill individual experiment (if needed):
+kill <PID>
+
+--------------------------------------------------------------------------------
+ESTIMATED COMPLETION:
+--------------------------------------------------------------------------------
+Exp 6.2: ~2-4 hours  (Finish: 2:32-4:32 AM)
+Exp 6.3: ~3-6 hours  (Finish: 3:32-6:32 AM)
+Exp 6.4: ~4-8 hours  (Finish: 4:32-8:32 AM)
+Exp 6.5: ~4-6 hours  (Finish: 4:32-6:32 AM)
+
+TOTAL: 10-15 hours   (Finish: 10:00 AM - 3:00 PM)
+
+--------------------------------------------------------------------------------
+LOG FILES:
+--------------------------------------------------------------------------------
+/home/aaron/projects/xai/logs/exp6_2_n500.log
+/home/aaron/projects/xai/logs/exp6_3_n300.log
+/home/aaron/projects/xai/logs/exp6_4_n500.log
+/home/aaron/projects/xai/logs/exp6_5_convergence.log
+
+--------------------------------------------------------------------------------
+OUTPUT DIRECTORIES:
+--------------------------------------------------------------------------------
+/home/aaron/projects/xai/experiments/production_n500_exp6_2_20251019_003231/
+/home/aaron/projects/xai/experiments/production_n300_exp6_3_20251019_003317/
+/home/aaron/projects/xai/experiments/production_n500_exp6_4_20251019_003233/
+/home/aaron/projects/xai/experiments/production_exp6_5_20251019_003318/
+
+--------------------------------------------------------------------------------
+RESULTS TO COLLECT (when complete):
+--------------------------------------------------------------------------------
+find experiments/production_n500_exp6_2_20251019_003231/ -name "results.json"
+find experiments/production_n300_exp6_3_20251019_003317/ -name "results.json"
+find experiments/production_n500_exp6_4_20251019_003233/ -name "results.json"
+find experiments/production_exp6_5_20251019_003318/ -name "*.json"
+
+find experiments/production_*/2025* -name "*.png"  # All plots
+
+================================================================================

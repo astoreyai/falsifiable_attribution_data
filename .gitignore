@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+
+# Large PDFs (can be regenerated from LaTeX)
+PHD_PIPELINE/*/latex/dissertation.pdf
+
+# OS
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.bak
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Data (if large)
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.csv
+*.npy
+*.npz
+
+# Experiment archives and debug
+experiments/ARCHIVE_*/
+experiments/DEPRECATED_*/
+experiments/*_TEST/
+experiments/*_DEBUG/
+experiments/*/*/visualizations/*.png
+experiments/*/visualizations/*.png
+
+# Dataset downloads (can be re-downloaded)
+data/lfw/
+data/celeba/
+data/cfp-fp/
+data/vggface2/
+
+# Model weights (if very large)
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Temp
+tmp/
+temp/
+.tmp/
+
+# Syncthing
+.stfolder/
+.stversions/
+.stignore
+syncthing-setup/

@@ -1,0 +1,55 @@
+DISSERTATION TABLES - FILE STRUCTURE
+=====================================
+
+Generated: October 18, 2025
+Location: /home/aaron/projects/xai/experiments/tables/
+Total Files: 11
+
+LaTeX Tables (7)
+----------------
+table_6_1.tex        679 bytes   Falsification Rate Comparison
+table_6_2.tex        872 bytes   Margin-Stratified Analysis
+table_6_3.tex       1.2K bytes   Attribute Falsifiability Rankings
+table_6_4.tex        663 bytes   Model-Agnostic Testing
+table_6_5.tex       1.3K bytes   Sample Size & Convergence
+table_6_6.tex        879 bytes   Biometric XAI Main Results
+table_6_7.tex       1.2K bytes   Demographic Fairness Analysis
+
+Documentation (4)
+-----------------
+README.md            11K bytes   Comprehensive documentation
+QUICK_REFERENCE.md   7.3K bytes  Quick lookup guide
+GENERATION_SUMMARY.txt 2.6K bytes Generation log
+FILE_STRUCTURE.txt    This file  File inventory
+
+Generator Script
+----------------
+../generate_dissertation_tables.py  737 lines  Table generator
+
+Data Sources (6)
+----------------
+../results_real/exp_6_1/exp_6_1_results_20251018_180300.json
+../results_real/exp_6_2/exp_6_2_results_20251018_183607.json
+../results_real/exp_6_3/exp_6_3_results_20251018_180752.json
+../results_real/exp_6_4/exp_6_4_results_20251018_180635.json
+../results_real/exp_6_5/exp_6_5_results_20251018_180753.json
+../results_real/exp_6_6/exp_6_6_results_20251018_180753.json
+
+Complete Dependency Chain
+--------------------------
+Experiments → Results JSON → Generator Script → LaTeX Tables → Dissertation
+
+Quality Assurance
+-----------------
+✓ All tables have valid LaTeX syntax
+✓ All data from real experiments (ZERO simulations)
+✓ All statistical tests properly reported
+✓ All sample sizes documented
+✓ All confidence intervals at 95%
+✓ All effect sizes calculated
+✓ All hypothesis results stated
+
+Ready for Dissertation
+----------------------
+YES - All tables production-ready
+

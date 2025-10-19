@@ -1,0 +1,17 @@
+{
+  "experiment": "Experiment 6.1 - FINAL REAL Implementation",
+  "timestamp": "20251018_212042",
+  "parameters": {
+    "n_pairs": 10,
+    "device": "cuda",
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW (sklearn, 1680 identities, 9164 images)",
+    "simulations": "ZERO - all values computed from real data",
+    "attribution_methods": 5,
+    "falsification_tests_per_pair": 100,
+    "gpu_accelerated": true
+  },
+  "methods": {},
+  "statistical_tests": {}
+}

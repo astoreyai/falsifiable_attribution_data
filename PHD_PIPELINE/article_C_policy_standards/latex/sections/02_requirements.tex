@@ -1,0 +1,57 @@
+\section{Regulatory and Evidentiary Requirements}
+
+Face recognition deployment in forensic contexts increasingly operates under comprehensive regulatory frameworks. Yet the translation of legal requirements into technical specifications remains poorly defined. This section reviews three major frameworks to extract specific requirements that XAI systems must satisfy.
+
+\subsection{European Union AI Act (2024)}
+
+The EU's Artificial Intelligence Act (Regulation 2024/1689) establishes the world's first comprehensive legal framework for AI systems~\cite{euaiact2024}. Biometric identification for law enforcement qualifies as a ``high-risk AI system'' (Annex III) subject to stringent requirements.
+
+Article 13 mandates transparency: systems must provide ``an appropriate level of transparency to give deployers clarity on the system's capabilities and limitations'' with information that is ``accurate, accessible, and comprehensible.'' Article 14 requires human oversight enabling operators to ``make informed decisions'' and identify ``risks, anomalies, and signs of performance issues.''
+
+For XAI, these provisions create dual obligations. Explanations must be (1) demonstrably accurate—correctly representing model reasoning, not merely interpretable—and (2) understandable to operators. Article 14's ``informed decisions'' language suggests explanations must enable meaningful oversight, giving operators tools to distinguish reliable from unreliable explanations in specific cases.
+
+The critical gap: the Act doesn't specify which XAI methods satisfy these requirements or what constitutes ``appropriate'' accuracy. This creates legal uncertainty. Can systems claim compliance merely by generating explanations (form), or must they validate explanation quality (substance)?
+
+\subsection{GDPR Article 22: Right to Explanation}
+
+The General Data Protection Regulation (2016) predates the AI Act but establishes foundational principles~\cite{gdpr2016}. Article 22(1) gives individuals the right not to be subject to solely automated decisions producing legal effects. When such decisions are permitted, Article 22(3) requires controllers to provide ``the right to obtain human intervention'' and ``to contest the decision.''
+
+Recital 71 specifies that controllers must provide ``meaningful information about the logic involved''—not necessarily individualized explanations for every decision, but system-level transparency about decisional logic~\cite{kaminski2019right}. For face verification, this means explaining which facial features influence match decisions and under what conditions the system is reliable or error-prone.
+
+The critical gap: GDPR doesn't quantify ``meaningful.'' If an XAI method systematically misidentifies important features—as empirical studies suggest occurs in 30--60\% of cases~\cite{adebayo2018sanity,kindermans2019reliability}—does it still provide meaningful information? The regulation establishes a right to explanation but not a standard for explanation quality.
+
+\subsection{United States: Daubert Standard}
+
+Unlike the EU, the United States lacks comprehensive AI legislation. However, forensic deployment is governed by evidentiary standards established through case law. When face recognition evidence appears in criminal proceedings, it must satisfy judicial reliability tests.
+
+The landmark \emph{Daubert v. Merrell Dow Pharmaceuticals}~\cite{daubert1993} decision in 1993 established the prevailing federal standard under Federal Rule of Evidence 702~\cite{fre702}. Judges must assess whether testimony is based on ``sufficient facts or data,'' uses ``reliable principles and methods,'' and involves ``reliable application'' to case facts. The Supreme Court identified non-exhaustive reliability factors:
+
+\begin{enumerate}[itemsep=2pt]
+    \item \textbf{Testability}: Can the method's claims be tested and potentially refuted?
+    \item \textbf{Peer Review}: Has the method been subjected to publication and peer review?
+    \item \textbf{Error Rates}: Are the technique's known or potential error rates documented?
+    \item \textbf{Standards}: Do standards control the technique's operation?
+    \item \textbf{General Acceptance}: Is the method generally accepted in the relevant scientific community?
+\end{enumerate}
+
+Current face verification XAI struggles with several factors. Explanations typically lack testability—saliency maps make no falsifiable predictions that can be empirically refuted. Error rates for explanation faithfulness go unreported (verification models report matching accuracy, not explanation accuracy). No standardized protocols exist for XAI validation in forensic face verification.
+
+The 2009 National Research Council report~\cite{nrc2009} ``Strengthening Forensic Science in the United States'' emphasized that forensic methods must have rigorous scientific foundations with validated error rates—a standard that face recognition XAI currently fails to meet.
+
+The critical gap: forensic deployment of unvalidated explanations may fail Daubert scrutiny—or worse, pass judicial review but contribute to wrongful convictions because courts lack tools to assess explanation reliability.
+
+\subsection{Synthesis: Seven Core Requirements}
+
+Across these frameworks, we identify seven evidentiary requirements:
+
+\begin{enumerate}[itemsep=2pt]
+    \item \textbf{Meaningful Information} (GDPR): Explanations must communicate the rationale behind decisions
+    \item \textbf{Testability} (Daubert): Methods must make falsifiable predictions
+    \item \textbf{Known Error Rates} (Daubert, AI Act): Conditions under which explanations fail must be documented
+    \item \textbf{Appropriate Accuracy} (AI Act): Explanations must correctly identify influential features
+    \item \textbf{Standards} (Daubert): Validation must follow published protocols with acceptance criteria
+    \item \textbf{Comprehensibility} (AI Act): Target users must correctly interpret explanations
+    \item \textbf{Human Oversight} (AI Act): Operators must identify unreliable explanations for specific cases
+\end{enumerate}
+
+Table~\ref{tab:requirements-gap} summarizes how current practice fails to meet these requirements. The remainder of this article operationalizes these requirements into measurable technical criteria.

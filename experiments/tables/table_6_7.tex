@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Demographic Fairness Analysis (Experiment 6.6)}
+\label{tab:demographic_fairness}
+\begin{tabular}{lccccc}
+\toprule
+Method & Gender Gap & Age Gap & DIR$_{\text{gender}}$ & DIR$_{\text{age}}$ & Fair \\
+\midrule
+\multicolumn{6}{l}{\textit{Standard Methods}} \\
+Grad-CAM & 9.1\% & 4.0\% & 0.82 & 0.92 & Yes \\
+SHAP & 9.3\% & 4.2\% & 0.82 & 0.91 & Yes \\
+LIME & 11.3\% & 4.4\% & 0.77 & 0.90 & No \\
+IG & 8.9\% & 0.2\% & 0.81 & 1.00 & Yes \\
+\midrule
+\multicolumn{6}{l}{\textit{Biometric Methods}} \\
+Bio-Grad-CAM & 1.9\% & 1.8\% & 0.94 & 0.94 & Yes \\
+Bio-SHAP & 2.3\% & 2.8\% & 0.92 & 0.91 & Yes \\
+Bio-LIME & 4.6\% & 1.9\% & 0.85 & 0.94 & Yes \\
+Geodesic IG & 3.2\% & 0.1\% & 0.90 & 1.00 & Yes \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+
+\footnotesize Note: DIR = Disparate Impact Ratio (higher is better, threshold = 0.8).
+Gender Gap = $|$FR$_{\text{male}}$ - FR$_{\text{female}}|$.
+Age Gap = $|$FR$_{\text{young}}$ - FR$_{\text{old}}|$.
+Biometric methods demonstrate superior fairness across all demographic groups.
+Standard methods show significant gender disparities ($p < 0.05$).
+\end{table}

@@ -1,0 +1,82 @@
+% Section 2: Background
+% Humanized: Condense regulatory requirements, natural citations, practitioner perspective
+
+\section{Background: Evidentiary Requirements for Automated Decision Systems}
+\label{sec:background}
+
+\subsection{Regulatory Landscape for High-Risk Biometric Systems}
+
+Three major frameworks establish requirements for explainability and validation in forensically deployed face verification systems. Rather than recount each statute in exhaustive detail, we focus on the specific technical obligations they create—and where current XAI practices fall short.
+
+\subsubsection{EU AI Act (2024): Technical Documentation Mandates}
+
+The European Union's AI Act classifies biometric identification systems as high-risk (Annex~III, Point~1(a)), triggering stringent oversight~\cite{euaiact2024}. Two articles directly impact attribution validation:
+
+\textit{Article~13(3)(d):} Systems must provide ``the level of accuracy, robustness and cybersecurity... together with any known and foreseeable circumstances that may have an impact on that expected level.'' This isn't a vague transparency aspiration. It's a legal mandate for \textit{quantitative accuracy metrics}. Our protocol delivers these through correlation coefficients ($\rho$, R$^2$), mean absolute error (MAE~$\pm$~SD), and stratified performance tables showing how accuracy degrades under poor lighting, extreme poses, or demographic shifts.
+
+\textit{Article~15(1):} Technical documentation must include ``the methods and steps performed for the validation of the AI system.'' Generating saliency maps isn't enough. Deployers must document \textit{how} they validated those maps. Our five-step falsification protocol (Section~\ref{sec:protocol}) provides this documentation structure: extraction → classification → perturbation → measurement → testing.
+
+These provisions create obligations that current XAI methods cannot meet. Grad-CAM produces heatmaps but offers no validation procedure. SHAP computes Shapley values but provides no accuracy guarantee. The AI Act demands more.
+
+\subsubsection{GDPR Article~22: Contestation Rights}
+
+GDPR Article~22(1) establishes the right not to be subject to solely automated decisions producing legal effects~\cite{gdpr2016}. Article~22(3) requires ``suitable measures to safeguard... rights and freedoms,'' including ``the right... to contest the decision.'' Legal scholars vigorously debate whether this implies a right to explanation~\cite{wachter2017right,selbst2017meaningful}. Wachter et al. argue GDPR mandates only information about system logic, not specific decision rationale. Selbst and Powles counter that meaningful contestation \textit{requires} understanding which factors influenced the outcome.
+
+We sidestep this debate by observing a simpler point: when explanations \textit{are} provided—as increasingly required by the AI Act—they must be accurate. Imagine a forensic report stating, ``The system matched these faces based primarily on nose structure,'' when in reality the model relied on background artifacts. This would constitute a GDPR violation under Article~5(1)(a)'s lawfulness and transparency principles. Misleading explanations prevent genuine contestation.
+
+Our protocol's contribution here is \textit{uncertainty quantification}. Field~4 of the forensic template (Section~\ref{sec:template}) reports calibration coverage: what percentage of predictions fall within stated confidence intervals? If we claim 90\% confidence and only 75\% of observations land in the predicted range, our uncertainty estimates are overconfident—unreliable for contestation. Well-calibrated intervals (empirical coverage~$\approx$~90\%) enable data subjects to meaningfully challenge predictions: ``Your explanation predicts this feature mattered with 90\% confidence, but when tested...''
+
+\subsubsection{U.S. Daubert Standard: Four Reliability Prongs}
+
+In U.S. federal courts, scientific expert testimony must satisfy Federal Rule of Evidence~702 and the \textit{Daubert} precedent~\cite{daubert1993}. Four factors assess reliability:
+
+\begin{enumerate}
+\item \textbf{Testability:} Can the theory or technique be tested? Is it falsifiable?
+\item \textbf{Peer Review:} Has the method been subjected to peer review and publication?
+\item \textbf{Error Rates:} What are the known or potential rates of error?
+\item \textbf{General Acceptance:} Is the method generally accepted in the relevant scientific community?
+\end{enumerate}
+
+When facial recognition evidence is presented in criminal proceedings, explanations fall under this standard. They're scientific claims about causation (``feature X drove decision Y''), requiring validation. The documented wrongful arrests—Williams, Woodruff, Parks—demonstrate real failures. In Williams' case, Detroit police relied on a facial recognition match without scrutinizing the explanation. Had validated attributions revealed high importance assigned to jacket color or background scenery rather than facial structure, examiners might have caught the error earlier.
+
+Our protocol addresses all four Daubert prongs. \textit{Testability}: counterfactual predictions are empirically falsifiable (Section~\ref{sec:protocol}). \textit{Peer review}: this article constitutes publication; code will be released for community validation. \textit{Error rates}: Field~5 of the forensic template reports falsification rates stratified by demographics and imaging conditions—exactly the ``known error rates'' Daubert demands. \textit{General acceptance}: to be established through future adoption, but the method builds on accepted techniques (gradient descent, statistical hypothesis testing, established perceptual metrics).
+
+\subsection{Forensic Science Standards for Tool Validation}
+
+The National Research Council's 2009 report \textit{Strengthening Forensic Science in the United States} criticized forensic disciplines lacking objective standards, known error rates, and proficiency testing~\cite{nrc2009forensics}. The report's key insight: forensic methods must undergo rigorous scientific validation \textit{before} deployment. Subjective examiner judgment isn't enough.
+
+Face verification systems, when used forensically, must meet these standards. Yet current XAI methods lack all three pillars:
+
+\textit{Objective Standards.} No consensus exists on when an explanation is ``faithful enough.'' Researchers report insertion-deletion scores or pointing game accuracy, but what threshold constitutes adequacy? 70\% localization? 80\%? The field has no agreed benchmark.
+
+\textit{Known Error Rates.} How often do Grad-CAM attributions misidentify causal features? No systematic measurement exists. We have relative comparisons (``Grad-CAM outperforms LIME on metric M''), but not absolute error quantification (``Grad-CAM falsifies on 38\% of test cases with known demographic disparities'').
+
+\textit{Proficiency Testing.} DNA analysts undergo blind proficiency tests—samples with known ground truth to assess examiner reliability~\cite{nrc2009forensics}. Attribution methods face no such testing. Our protocol provides the framework: run falsification tests on benchmark datasets (LFW, CelebA), report passage rates, stratify by subgroups.
+
+The NRC report also established forensic science's foundational principle: \textit{every statement must be scientifically defensible}. Presenting a saliency map in court testimony without validation violates this principle. Our forensic template (Section~\ref{sec:template}) operationalizes defensibility through structured documentation.
+
+\subsection{Gap Analysis: What's Missing?}
+
+Table~\ref{tab:gap_analysis} summarizes the disconnect between evidentiary requirements and current XAI practice.
+
+\begin{table}[!t]
+\centering
+\caption{Gap Between Evidentiary Requirements and Current XAI Practice}
+\label{tab:gap_analysis}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.32\linewidth}p{0.38\linewidth}@{}}
+\toprule
+\textbf{Requirement} & \textbf{Current Practice} & \textbf{Protocol Contribution} \\ \midrule
+Testability (Daubert) & Subjective interpretability & Falsifiable counterfactual predictions (Sec.~\ref{sec:protocol}) \\ \midrule
+Known Error Rates (Daubert, NRC) & Relative method comparisons & Statistical tests with p-values, stratified failure rates (Sec.~\ref{sec:template}, Field~5) \\ \midrule
+Accuracy Metrics (AI Act Art.~13) & Proxy metrics (insertion-deletion) & Direct geodesic distance correlation $\rho$ (Sec.~\ref{sec:endpoints}) \\ \midrule
+Validation Docs (AI Act Art.~15) & Ad-hoc reporting & Standardized seven-field template (Sec.~\ref{sec:template}) \\ \midrule
+Objective Standards (NRC 2009) & Researcher-dependent thresholds & Pre-registered frozen thresholds (Sec.~\ref{sec:endpoints}) \\ \midrule
+Contestation (GDPR Art.~22) & Static saliency maps & Uncertainty-quantified predictions with calibration (Sec.~\ref{sec:template}, Field~4) \\ \bottomrule
+\end{tabular}
+\end{table}
+
+The gap is clear: existing methods generate explanations but don't validate them. Insertion-deletion curves, localization metrics, consistency checks—all provide \textit{relative} quality assessments. None answer the binary question a forensic examiner needs: ``Can I trust this attribution, yes or no?'' Our protocol provides that binary verdict through rigorous testing.
+
+Consider a concrete example. A forensic analyst examines a match between a suspect photo and surveillance footage. Grad-CAM highlights the nose and upper lip. Is this attribution faithful? Under current practice, the analyst has only intuition (``seems reasonable, noses do vary between individuals''). Our protocol offers empirical testing: generate 200 counterfactuals masking the nose region, measure embedding shifts, compare to predictions. If observed shifts align with attribution-based predictions ($\rho > 0.7$, p~$<$~0.05), the attribution survives falsification. If not, it's unreliable—and the analyst knows to seek alternative evidence.
+
+This is the core contribution: shifting attribution validation from subjective plausibility assessment to empirical hypothesis testing. The next section details how.

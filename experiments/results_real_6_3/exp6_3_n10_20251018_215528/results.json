@@ -1,0 +1,43 @@
+{
+  "experiment": "Experiment 6.3 - REAL Attribute-Based Validation",
+  "timestamp": "20251018_215528",
+  "parameters": {
+    "n_samples": 10,
+    "K_counterfactuals": 5,
+    "theta_high": 0.5,
+    "theta_low": 0.2,
+    "device": "cpu",
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW with REAL InsightFace attribute detection",
+    "attribution_method": "Grad-CAM",
+    "simulations": "ZERO - all attributes detected from real landmark positions",
+    "gpu_accelerated": false
+  },
+  "attribute_results": {},
+  "category_analysis": {
+    "category_means": {},
+    "ranking": []
+  },
+  "statistical_tests": {
+    "anova": {
+      "f_statistic": null,
+      "p_value": null,
+      "is_significant": null
+    },
+    "hypothesis_test": {
+      "occlusion_mean": 0.0,
+      "geometric_mean": 0.0,
+      "difference": 0.0,
+      "hypothesis_supported": false,
+      "t_statistic": null,
+      "t_p_value": null
+    }
+  },
+  "key_findings": {
+    "most_falsifiable_attribute": null,
+    "most_falsifiable_category": null,
+    "hypothesis_supported": false,
+    "n_attributes_tested": 0
+  }
+}

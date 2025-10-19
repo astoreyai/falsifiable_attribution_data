@@ -1,0 +1,89 @@
+% Article B: Operational Protocol and Pre-Registered Thresholds
+% IEEE Transactions on Information Forensics and Security
+% IEEE T-IFS Two-Column Format
+
+\documentclass[journal]{IEEEtran}
+
+% Required IEEE T-IFS packages
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{float}  % For [H] table placement option
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+
+% Fix for BibTeX
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Title
+\title{Evidence Thresholds for Explainable Face Verification:\\
+Counterfactual Faithfulness, Uncertainty, and Reporting}
+
+% Author information
+\author{Aaron~W.~Storey,~\IEEEmembership{Student Member,~IEEE,}
+        and~Masudul~H.~Imtiaz,~\IEEEmembership{Member,~IEEE}%
+\thanks{A. W. Storey and M. H. Imtiaz are with the Department of Computer Science,
+Clarkson University, Potsdam, NY 13699, USA (e-mail: storeyaw@clarkson.edu; mimtiaz@clarkson.edu).}%
+\thanks{Manuscript received October 15, 2025; revised XXX XX, 2026.}%
+}
+
+% Running headers
+\markboth{IEEE Transactions on Information Forensics and Security,~Vol.~XX, No.~X, XXX~2026}%
+{Storey \MakeLowercase{\textit{et al.}}: Evidence Thresholds for Explainable Face Verification}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Face verification systems deployed in forensic investigations rely increasingly on explainable AI (XAI) methods—Grad-CAM, SHAP, Integrated Gradients—to justify identification decisions with legal and civil liberty consequences. Yet these explanations lack a critical property: falsifiability. When Grad-CAM highlights the eye region as driving a match, practitioners have no principled method to test this claim. We address this gap through an operational validation protocol treating attribution faithfulness as an empirically testable hypothesis. If an explanation correctly identifies causal features, then perturbing those features should produce predictable changes in verification scores—a counterfactual prediction we can measure.
+
+This article presents three contributions for forensic face recognition. First, we provide a systematic five-step falsification protocol producing binary verdicts: ``NOT FALSIFIED'' (attributions align with model behavior) or ``FALSIFIED'' (contradictory evidence). The protocol includes statistical hypothesis testing with Bonferroni correction and plausibility gates (LPIPS~$<$~0.3, FID~$<$~50) ensuring counterfactuals remain perceptually realistic. Second, we establish pre-registered validation thresholds—frozen before experimental execution to prevent post-hoc adjustment—including geodesic distance correlation floors ($\rho > 0.7$) and confidence interval calibration ranges (90--100\% coverage). Third, we provide a forensic reporting template with seven standardized fields designed to meet Daubert admissibility standards, operationalizing requirements from the EU AI Act (Articles~13--15), GDPR (Article~22), and U.S. Federal Rules of Evidence (Rule~702).
+
+Our protocol bridges the gap between current XAI evaluation practices (subjective interpretability, proxy metrics) and evidentiary requirements (testability, known error rates, objective standards). The systematic methodology enables forensic analysts to validate explanations scientifically while meeting regulatory transparency mandates. Pre-registration ensures scientific integrity; the forensic template enables transparent communication to legal professionals and oversight bodies.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Face Verification, Explainable AI, Forensic Science, Evidence Standards, Counterfactual Validation, Attribution Faithfulness, Pre-registration, Protocol Validation
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+% Section files
+\input{sections/01_introduction}
+\input{sections/02_background}
+\input{sections/03_protocol}
+\input{sections/04_endpoints}
+\input{sections/05_template}
+\input{sections/06_limitations}
+
+% Placeholder sections for experimental results (to be completed)
+\section{Experimental Results}
+\label{sec:results}
+\textit{[Section awaiting completion of full-scale experiments on LFW and CelebA datasets using ArcFace and CosFace models. Planned content: empirical validation results for Grad-CAM, SHAP, LIME, and Integrated Gradients; correlation coefficients with 95\% CIs; calibration coverage rates; falsification rate breakdowns; statistical significance tests; visualizations. Estimated length: 3~pages.]}
+
+\section{Discussion}
+\label{sec:discussion}
+\textit{[Section to be written after results analysis. Planned content: interpretation of findings; which methods pass validation; comparison to theoretical predictions; implications for forensic deployment; recommendations for practitioners; future research directions; broader impact on XAI evaluation standards. Estimated length: 2.5~pages.]}
+
+% Appendix
+\appendices
+\input{sections/appendix_checklist}
+
+% Bibliography
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

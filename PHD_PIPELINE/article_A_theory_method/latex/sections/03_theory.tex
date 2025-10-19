@@ -1,0 +1,112 @@
+\section{Theory: Falsifiability Criterion}
+\label{sec:theory}
+
+\subsection{Preliminaries and Notation}
+
+We establish notation before stating the main result. Let $f: \mathcal{X} \to \Sphere^{d-1}$ denote a face recognition model (ArcFace/CosFace) mapping images to L2-normalized embeddings. For input $x$, write $\phi(x) = f(x) \in \Sphere^{d-1}$ for the embedding (typically $d=512$). Geodesic distance between embeddings is:
+\begin{equation}
+d_g(u,v) = \arccos(\langle u, v \rangle) \in [0, \pi]
+\end{equation}
+measured in radians, where $\langle u, v \rangle = \sum_{i=1}^d u_i v_i$ is the inner product. For face verification, genuine pairs typically yield $d_g < 0.8$ rad while impostor pairs exceed $d_g > 1.0$ rad.
+
+Let $A: \mathcal{X} \to \R^M$ denote an attribution method (SHAP, Grad-CAM, Integrated Gradients), producing attribution vector $\phi = A(x)$ where $\phi_i$ quantifies the importance of feature $i$ for the verification decision. Features correspond to spatial regions (7$\times$7 Grad-CAM blocks) or semantic units (superpixels for SHAP).
+
+Finally, let $C: \mathcal{X} \times 2^M \to \mathcal{X}$ denote a counterfactual generator. Given input $x$ and feature subset $S \subseteq M$, the generator produces $x' = C(x, S)$ where features in $S$ are perturbed while others remain fixed. Algorithm~\ref{alg:counterfactual} provides our concrete instantiation.
+
+\subsection{The Falsifiability Criterion}
+
+What does it mean for an attribution to be falsifiable? Following Popper~\citep{popper1959logic}, a scientific statement must make testable predictions that could be empirically refuted. We translate this to XAI: an attribution is falsifiable if it predicts differential model behavior under counterfactual perturbations, with predictions specific enough to be proven wrong.
+
+\begin{theorem}[Falsifiability Criterion]
+\label{thm:falsifiability}
+Let $\phi = A(x)$ be an attribution for input $x$ with feature set $M$. Define high- and low-attribution subsets via thresholds $\theta_{\text{high}} > \theta_{\text{low}} > 0$:
+\begin{equation}
+S_{\text{high}} = \{i \in M : |\phi_i| > \theta_{\text{high}}\}, \quad
+S_{\text{low}} = \{i \in M : |\phi_i| < \theta_{\text{low}}\}
+\end{equation}
+
+The attribution $\phi$ is \textbf{falsifiable} if and only if the following conditions hold:
+
+\begin{enumerate}
+\item \textbf{Non-Triviality:} Both feature sets are non-empty: $S_{\text{high}} \neq \emptyset$ and $S_{\text{low}} \neq \emptyset$.
+
+\item \textbf{Differential Prediction:} There exist thresholds $\tau_{\text{high}}, \tau_{\text{low}} \in [0, \pi]$ such that:
+\begin{align}
+\E_{x' \sim C(x, S_{\text{high}})} [d_g(f(x), f(x'))] &> \tau_{\text{high}} \label{eq:pred-high}\\
+\E_{x' \sim C(x, S_{\text{low}})} [d_g(f(x), f(x'))] &< \tau_{\text{low}} \label{eq:pred-low}
+\end{align}
+
+\item \textbf{Separation Margin:} The thresholds are separated: $\tau_{\text{high}} > \tau_{\text{low}} + \epsilon$ for some margin $\epsilon > 0$ (typically $\epsilon = 0.15$ rad $\approx 8.6^\circ$).
+\end{enumerate}
+
+If these conditions hold, the attribution makes two testable predictions: (1) perturbing high-attribution features causes large geodesic embedding shifts ($> \tau_{\text{high}}$), and (2) perturbing low-attribution features causes small shifts ($< \tau_{\text{low}}$). Empirical measurements contradicting these predictions falsify the attribution.
+\end{theorem}
+
+\textbf{Geometric intuition.} Face embeddings lie on a 512-dimensional unit sphere. When we modify features (mask eyes, add glasses, blur skin texture), the embedding moves along a geodesic arc. The theorem demands that attributions predict the arc length: high-attribution features should cause large movement, low-attribution features should cause small movement, with a significant gap between them. If an attribution claims the eyes are critical but masking them barely moves the embedding—while masking the background (low attribution) causes huge movement—the attribution is falsified.
+
+This differs fundamentally from faithfulness metrics. Insertion-deletion measures \emph{correlation} between attribution and score change. Our criterion demands \emph{prediction} of score change magnitudes with statistically testable separation. Correlation without prediction is unfalsifiable; prediction with testable separation is falsifiable.
+
+\begin{proof}[Proof Sketch]
+(Sufficiency) Assume conditions (1)-(3) hold. Then the attribution makes differential predictions~\eqref{eq:pred-high}-\eqref{eq:pred-low} about expected geodesic distances. These expectations can be approximated by sample means: generate $K$ counterfactuals for each feature set, compute $\bar{d}_{\text{high}} = \frac{1}{K} \sum_{k=1}^K d_g(f(x), f(C(x, S_{\text{high}})_k))$ and similarly for $\bar{d}_{\text{low}}$. By Hoeffding's inequality~\citep{hoeffding1963probability}, for $K \geq 200$ samples, $|\bar{d} - \E[d]| < 0.05$ rad with probability $>95\%$ (assuming geodesic distances bounded in $[0, \pi]$).
+
+The predictions are falsifiable because empirical testing can refute them: if $\bar{d}_{\text{high}} \leq \tau_{\text{high}}$ or $\bar{d}_{\text{low}} \geq \tau_{\text{low}}$ (with statistical confidence), the attribution is falsified. This satisfies Popper's criterion—the statement makes testable predictions that could be proven wrong.
+
+(Necessity) If condition (1) fails, then either $S_{\text{high}}$ or $S_{\text{low}}$ is empty, making differential prediction impossible (no features to perturb). If condition (2) fails, the claimed predictions are already empirically false, rendering the attribution unfalsifiable (it makes no true prediction). If condition (3) fails, separation $\tau_{\text{high}} - \tau_{\text{low}}$ is too small to distinguish signal from noise (given finite sampling and measurement error), again preventing falsification. Thus all three conditions are necessary. \qed
+\end{proof}
+
+\subsection{Connection to Popper's Falsifiability}
+
+Popper~\citep{popper1959logic} argued that falsifiability demarcates science from pseudoscience. Scientific statements must make risky predictions—claims that could be empirically refuted if wrong. ``All swans are white'' is scientific because observing a black swan falsifies it. ``Invisible unicorns exist'' is unfalsifiable because no observation can refute it.
+
+We extend this to XAI. Consider two explanation styles:
+
+\begin{itemize}
+\item \textbf{Unfalsifiable:} ``The eyes are important for this match.'' This is vague—what counts as confirmation or refutation? Does masking the eyes need to change the score? By how much? The claim makes no testable prediction.
+
+\item \textbf{Falsifiable:} ``Masking the eyes (high attribution) will cause geodesic distance $d_g > 0.75$ rad, while masking the background (low attribution) will cause $d_g < 0.55$ rad.'' This is testable—generate counterfactuals, measure distances, refute if predictions fail.
+\end{itemize}
+
+Theorem~\ref{thm:falsifiability} formalizes this distinction. Attributions satisfying conditions (1)-(3) make differential predictions with measurable separation—predictions that empirical testing can falsify. Attributions violating any condition make no such predictions, rendering them unfalsifiable by Popper's criterion.
+
+Why does this matter for forensic deployment? Courts demand testable science (Daubert standard). DNA labs report match probabilities with error rates. Fingerprint examiners undergo proficiency testing. XAI for face verification must meet the same standard. Our criterion provides the test: generate counterfactuals, measure geodesic distances, check predictions. If they hold (with statistical confidence), the explanation passes scientific scrutiny. If they fail, the explanation is falsified—and should not be used as evidence.
+
+\subsection{Assumptions and Scope}
+
+The falsifiability criterion relies on five assumptions, which we state formally for clarity.
+
+\begin{assumption}[Unit Hypersphere Embeddings]
+\label{assump:hypersphere}
+The model $f$ maps inputs to L2-normalized embeddings: $\|f(x)\|_2 = 1$ for all $x \in \mathcal{X}$.
+\end{assumption}
+
+This holds for ArcFace~\citep{deng2019arcface}, CosFace~\citep{wang2018cosface}, and SphereFace~\citep{liu2017sphereface}, but \emph{not} for FaceNet with triplet loss (unnormalized Euclidean embeddings)~\citep{schroff2015facenet}. Verification: check for explicit L2 normalization layer before similarity computation.
+
+\begin{assumption}[Geodesic Metric]
+\label{assump:geodesic}
+Verification decisions are based on geodesic distance $d_g(u,v) = \arccos(\langle u, v \rangle)$ or equivalently cosine similarity $\langle u, v \rangle$.
+\end{assumption}
+
+For unit-normalized vectors, these are monotonically related: high similarity $\Leftrightarrow$ small geodesic distance. Standard for angular margin losses.
+
+\begin{assumption}[Plausible Counterfactuals Exist]
+\label{assump:plausibility}
+For target distance $\delta_{\text{target}} \in [0.3, 1.2]$ rad and feature set $S$, there exists $x' = C(x, S)$ with $d_g(f(x), f(x')) \approx \delta_{\text{target}}$ and $\|x' - x\|_2 < \epsilon_{\text{pixel}}$ (plausibility bound, typically $\epsilon_{\text{pixel}} = 0.2$ for RGB $\in [0,1]^3$).
+\end{assumption}
+
+This assumes the face manifold is rich enough to support perturbations that achieve desired geodesic distances while remaining perceptually realistic. Empirical validation in Section~\ref{sec:experiments} (placeholder) will report LPIPS perceptual similarity and human evaluation.
+
+\begin{assumption}[Verification Task (1:1)]
+\label{assump:verification}
+The framework applies to pairwise face verification (1:1 matching), not face identification (1:N gallery search) or multi-class classification.
+\end{assumption}
+
+Extending to identification requires defining attributions for ranked matches and adjusting thresholds for gallery size effects—feasible but beyond our current scope.
+
+\begin{assumption}[Differentiability]
+\label{assump:differentiable}
+The model $f$ is differentiable with respect to inputs, enabling gradient-based optimization: $\nabla_x f(x)$ exists and is computable.
+\end{assumption}
+
+Required for Algorithm~\ref{alg:counterfactual} and gradient-based attribution methods (Integrated Gradients, Grad-CAM). SHAP is model-agnostic and does not require gradients, but our counterfactual generator does. For black-box APIs without gradient access, only SHAP-based falsification is feasible.
+
+These assumptions are standard for face verification research but exclude certain model families (FaceNet) and deployment scenarios (proprietary APIs). Section~\ref{sec:discussion} (placeholder) will discuss extensions and workarounds.

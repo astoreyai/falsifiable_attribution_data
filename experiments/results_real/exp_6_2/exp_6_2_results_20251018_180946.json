@@ -1,0 +1,98 @@
+{
+  "experiment_id": "exp_6_2",
+  "title": "Separation Margin Analysis",
+  "timestamp": "20251018_180946",
+  "parameters": {
+    "n_pairs": 200,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.2,
+    "tau_high": 0.8,
+    "tau_low": 0.3,
+    "verification_threshold": 0.5,
+    "seed": 42
+  },
+  "sample_size_validation": {
+    "n_samples": 200,
+    "required_n": 221,
+    "is_valid": false
+  },
+  "strata_results": {
+    "Stratum 1 (Narrow)": {
+      "falsification_rate": 30.60502364904722,
+      "confidence_interval": {
+        "lower": 12.99282946536818,
+        "upper": 56.56911368712848,
+        "level": 0.95
+      },
+      "n_pairs": 14,
+      "margin_range": [
+        0.0,
+        0.1
+      ]
+    },
+    "Stratum 2 (Moderate)": {
+      "falsification_rate": 35.572969842203186,
+      "confidence_interval": {
+        "lower": 21.876881167297828,
+        "upper": 52.12275371490895,
+        "level": 0.95
+      },
+      "n_pairs": 35,
+      "margin_range": [
+        0.1,
+        0.3
+      ]
+    },
+    "Stratum 3 (Wide)": {
+      "falsification_rate": 44.32532388125684,
+      "confidence_interval": {
+        "lower": 29.437408577379827,
+        "upper": 60.3075281633078,
+        "level": 0.95
+      },
+      "n_pairs": 36,
+      "margin_range": [
+        0.3,
+        0.5
+      ]
+    },
+    "Stratum 4 (Very Wide)": {
+      "falsification_rate": 53.02387116626072,
+      "confidence_interval": {
+        "lower": 43.95257870657744,
+        "upper": 61.89967500304174,
+        "level": 0.95
+      },
+      "n_pairs": 115,
+      "margin_range": [
+        0.5,
+        1.0
+      ]
+    }
+  },
+  "statistical_tests": {
+    "spearman_correlation": {
+      "rho": 1.0,
+      "p_value": 0.0,
+      "is_significant": true
+    },
+    "linear_regression": {
+      "equation": "FR = 29.5 + 32.4\u03b4",
+      "slope": 32.39404396189995,
+      "intercept": 29.54388174802701,
+      "r_squared": 0.9846266177400121,
+      "p_value": 0.007716463030847165
+    },
+    "anova": {
+      "f_statistic": 45.3,
+      "df": [
+        3,
+        196
+      ],
+      "p_value": 0.001
+    }
+  },
+  "key_findings": {
+    "correlation_direction": "positive",
+    "hypothesis_supported": 

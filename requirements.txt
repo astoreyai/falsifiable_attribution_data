@@ -1,0 +1,37 @@
+# FastSHAP-ViT Requirements
+# Python 3.11+
+
+# Core Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Scientific Computing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Data Processing
+pandas>=2.0.0
+Pillow>=9.5.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Training & Logging
+tensorboard>=2.13.0
+tqdm>=4.65.0
+
+# Utilities
+gdown>=4.7.0  # For Google Drive downloads
+scikit-learn>=1.3.0
+
+# Attribution Methods
+shap>=0.42.0  # SHAP (Shapley Additive Explanations)
+lime>=0.2.0.1  # LIME (Local Interpretable Model-agnostic Explanations)
+scikit-image>=0.21.0  # For image segmentation (superpixels)
+
+# Optional (for advanced features)
+# opencv-python>=4.7.0  # For advanced image processing
+# timm>=0.9.0  # For pre-trained ViT weights
+# fairlearn>=0.8.0  # For advanced fairness metrics

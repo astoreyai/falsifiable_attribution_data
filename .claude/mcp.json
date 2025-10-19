@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "zotero": {
+      "command": "zotero-mcp",
+      "args": [],
+      "env": {}
+    }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "experiment_id": "exp_6_3",
+  "title": "Attribute-Based Validation",
+  "timestamp": "20251018_180752",
+  "parameters": {
+    "n_samples": 200,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.2,
+    "tau_high": 0.8,
+    "tau_low": 0.3,
+    "seed": 42
+  },
+  "sample_size_validation": {
+    "n_samples": 200,
+    "required_n": 221,
+    "is_valid": false
+  },
+  "top_10_attributes": {
+    "Smiling": {
+      "rank": 1,
+      "category": "Expression",
+      "falsification_rate": 68.69671415301123,
+      "confidence_interval": {
+        "lower": 62.639174100420526,
+        "upper": 74.17699784453202,
+        "level": 0.95
+      },
+      "n_samples": 245
+    },
+    "Male": {
+      "rank": 2,
+      "category": "Demographic",
+      "falsification_rate": 67.26173569882882,
+      "confidence_interval": {
+        "lower": 63.081644199391285,
+        "upper": 71.18473174489837,
+        "level": 0.95
+      },
+      "n_samples": 512
+    },
+    "Eyeglasses": {
+      "rank": 3,
+      "category": "Occlusion",
+      "falsification_rate": 65.5476885381007,
+      "confidence_interval": {
+        "lower": 58.48530009937356,
+        "upper": 71.9841563236829,
+        "level": 0.95
+      },
+      "n_samples": 187
+    },
+    "Goatee": {
+      "rank": 4,
+      "category": "Occlusion",
+      "falsification_rate": 62.223029856408026,
+      "confidence_interval": {
+        "lower": 54.40743696458089,
+        "upper": 69.45111227124211,
+        "level": 0.95
+      },
+      "n_samples": 156
+    },
+    "Wearing_Hat": {
+      "rank": 5,
+      "category": "Occlusion",
+      "falsification_rate": 59.665846625276664,
+      "confidence_interval": {
+        "lower": 50.00979732007432,
+        "upper": 68.62682957350498,
+        "level": 0.95
+      },
+      "n_samples": 103
+    },
+    "Young": {
+      "rank": 6,
+      "category": "Demographic",
+      "falsification_rate": 59.06586304305082,
+      "confidence_interval": {
+        "lower": 54.11400477336032,
+        "upper": 63.84041752378542,
+        "level": 0.95
+      },
+      "n_samples": 389
+    },
+    "Heavy_Makeup": {
+      "rank": 7,
+      "category": "Occlusion",
+      "falsification_rate": 53.97921281550739,
+      "confidence_interval": {
+        "lower": 46.65043793177178,
+        "upper": 61.139863419239035,
+        "level": 0.95
+      },
+      "n_samples": 178
+    },
+    "Bald": {
+      "rank": 8,
+      "category": "Geometric",
+      "falsification_rate": 51.36743472915291,
+      "confidence_interval": {
+        "lower": 43.21957609146696,
+        "upper": 59.44325700290636,
+        "level": 0.95
+      },
+      "n_samples": 142
+    },
+    "Mustache": {
+      "rank": 9,
+      "category": "Occlusion",
+      "falsification_rate": 42.73052561406505,
+      "confidence_interval": {
+        "lower": 33.39318285203863,
+        "upper": 52.61627738014602,
+        "level": 0.95
+      },
+      "n_samples": 98
+    },
+    "Wearing_Lipstick": {
+      "rank": 10,
+      "category": "Occlusion",
+      "falsification_rate": 41.042560043585965,
+      "confidence_interval": {
+        "lower": 33.07647902143553,
+        "upper": 49.50790503211919,
+        "level": 0.95
+      },
+      "n_samples": 134
+    }
+  },
+  "category_analysis": {
+    "category_means": {
+      "Occlusion": 54.19814391549064,
+      "Geometric": 51.36743472915291,
+      "Expression": 68.69671415301123,
+      "Demographic": 63.16379937093981
+    },
+    "ranking": [
+      [
+        "Expression",
+        68.69671415301123
+      ],
+      [
+        "Demographic",
+        63.16379937093981
+      ],
+      [
+        "Occlusion",
+        54.19814391549064
+      ],
+      [
+        "Geometric",
+        51.36743472915291
+      ]
+    ]
+  },
+  "statistical_tests": {
+    "anova": {
+      "f_statistic": 0.19,
+      "df": [
+        9,
+        990
+      ],
+      "p_value": 0.995,
+      "is_significant": false
+    },
+    "category_comparison": {
+      "occlusion_mean": 54.19814391549064,
+      "geometric_mean": 51.36743472915291,
+      "difference": 2.830709186337728
+    }
+  },
+  "key_findings": {
+    "most_falsifiable": "Smiling",
+    "hypothesis_supported": true,
+    "occlusion_count_in_top_10": 6
+  }
+}

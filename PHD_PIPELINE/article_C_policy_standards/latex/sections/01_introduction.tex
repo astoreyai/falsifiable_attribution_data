@@ -1,0 +1,25 @@
+\section{Introduction}
+
+Face recognition has become infrastructure for law enforcement. From identifying suspects in criminal investigations to screening travelers at international borders, these systems now touch millions of lives. The technology works—accuracy rates exceed 99.7\% on standard benchmarks~\cite{deng2019arcface,grother2019frvt}. Yet when a system flags a face as a match (or critically, declares a non-match), the computational pathway leading to that decision remains opaque. Investigators, defendants, and judges alike face a black box.
+
+This opacity has immediate consequences that have destroyed lives. In January 2020, Robert Williams was arrested in his driveway in front of his wife and daughters based on a false face recognition match~\cite{hill2020williams}. The Detroit Police Department ran surveillance footage through their system, received a match, and made the arrest—Williams spent 30 hours in custody before fingerprint analysis revealed the error. A similar case occurred in 2023 with Michael Oliver~\cite{hill2023oliver}, who also experienced wrongful arrest due to face recognition misidentification. Both incidents share a troubling pattern: the systems were accurate most of the time, but when they failed, no one knew why.
+
+Explainable AI (XAI) emerged to address precisely this accountability gap. Methods like Gradient-weighted Class Activation Mapping (Grad-CAM)~\cite{selvaraju2017gradcam} and SHapley Additive exPlanations (SHAP)~\cite{lundberg2017shap} generate visual saliency maps highlighting which facial regions influenced a verification decision. These heatmaps appear intuitive—if the system highlights the eyes and nose as important for a match, that seems reasonable. But appearances can deceive. Without rigorous validation, we don't know whether these explanations reflect the model's actual reasoning or merely produce visually plausible post-hoc rationalizations~\cite{adebayo2018sanity}.
+
+Here lies the evidentiary gap. The European Union's AI Act (2024) mandates that high-risk biometric systems provide ``appropriate transparency'' with ``accurate, accessible, and comprehensible information''~\cite{euaiact2024}. GDPR Article 22 requires ``meaningful information about the logic involved'' in automated decisions~\cite{gdpr2016}. In U.S. courts, the Daubert standard requires scientific evidence to be testable, have known error rates, and adhere to accepted standards~\cite{daubert1993}. Current XAI practice—generating explanations without validating their faithfulness—cannot definitively demonstrate compliance with any of these requirements.
+
+Consider what this means in practice. A forensic analyst receives a face match along with a saliency map highlighting certain facial features. The analyst must decide: is this a reliable lead worth pursuing? Should this evidence be presented in court? Without knowing the explanation's error rate—without even knowing whether the highlighted features actually influenced the model's decision—the analyst operates on faith, not science.
+
+This article addresses three urgent questions for regulators, legal practitioners, and forensic professionals:
+
+\begin{enumerate}[itemsep=0pt]
+    \item What specific technical evidence do regulatory frameworks actually require from XAI systems deployed in forensic face verification?
+    \item How can vague legal concepts like ``meaningful information'' and ``appropriate transparency'' be operationalized into measurable technical criteria?
+    \item What validation protocols and acceptance thresholds would constitute sufficient evidence for responsible forensic deployment?
+\end{enumerate}
+
+Through systematic analysis of regulatory requirements (EU AI Act, GDPR, Daubert standard), we identify seven evidentiary requirements and propose minimal technical specifications for each. The analysis synthesizes legal scholarship on algorithmic accountability with recent computer science research on XAI validation, translating between legal and technical vocabularies to create actionable compliance criteria.
+
+Our framework reveals an uncomfortable truth: current practice achieves compliance in form but not substance. Systems generate explanations (satisfying literal regulatory language) without validating them (failing the policy intent). This form-versus-substance gap creates risks for everyone involved—wrongful identifications based on misleading explanations, Daubert inadmissibility challenges derailing prosecutions, and regulatory enforcement uncertainty.
+
+The path forward requires evidence-based policy. We conclude with concrete recommendations for regulators (establish technical standards operationalizing vague requirements), developers (adopt validation-first development practices), auditors (conduct independent testing beyond vendor claims), and courts (subject XAI evidence to rigorous Daubert scrutiny). Face recognition XAI stands where DNA analysis stood decades ago—at an inflection point between ad-hoc practice and scientific rigor. The documented wrongful arrests and regulatory mandates create urgency. This article provides a roadmap.

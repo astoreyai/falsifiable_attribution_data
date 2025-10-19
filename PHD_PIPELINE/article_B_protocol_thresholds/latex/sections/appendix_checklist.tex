@@ -1,0 +1,237 @@
+% Appendix: Practitioner Checklist (Abbreviated for Space)
+% Humanized: Practical, actionable, troubleshooting
+
+\section{Practitioner Checklist (Abbreviated)}
+\label{sec:appendix_checklist}
+
+This appendix provides condensed step-by-step guidance for forensic analysts implementing the validation protocol. The full checklist (730+ lines) is available in supplementary materials and online at \texttt{[repository URL]}.
+
+\subsection{Pre-Deployment Preparation}
+
+\textbf{System Requirements:}
+\begin{itemize}
+\item Hardware: GPU with $\geq$16~GB VRAM (NVIDIA RTX 3090 or equivalent)
+\item Software: Python 3.8+, PyTorch 2.0+, Captum v0.6.0+
+\item Model: Pretrained ArcFace/CosFace (512-D L2-normalized)
+\item Data: Calibration set (500 images, separate from test), test set ($\geq$500 pairs)
+\end{itemize}
+
+\textbf{Pre-Registration (CRITICAL):}
+\begin{enumerate}
+\item Freeze thresholds: $\theta_{\text{high}}=0.7$, $\theta_{\text{low}}=0.4$, $\tau_{\text{high}}=0.75$, $\tau_{\text{low}}=0.55$, $\epsilon=0.15$, $\rho_{\text{min}}=0.7$
+\item Document calibration procedure (record calibration set composition)
+\item Submit pre-registration to OSF or AsPredicted
+\item Obtain timestamped URL and generate SHA-256 hash
+\end{enumerate}
+
+\textbf{Code Setup:}
+\begin{itemize}
+\item Download reference implementation from \texttt{[repository URL]}
+\item Install dependencies: \texttt{pip install -r requirements.txt}
+\item Run unit tests: \texttt{pytest tests/}
+\item Validate on toy example (should achieve convergence $>$90\%)
+\end{itemize}
+
+\subsection{Running the Protocol (Per Image)}
+
+\textbf{Step 1: Attribution Extraction}
+\begin{verbatim}
+attribution = gradcam.attribute(image, model)
+# Verify dimensions: (7, 7) for Grad-CAM
+\end{verbatim}
+
+\textbf{Step 2: Feature Classification}
+\begin{verbatim}
+S_high = {i: abs(attr[i]) > 0.7}
+S_low = {i: abs(attr[i]) < 0.4}
+# Check: both sets non-empty
+if not S_high or not S_low:
+    return "FALSIFIED (Non-Triviality)"
+\end{verbatim}
+
+\textbf{Step 3: Counterfactual Generation} (Algorithm~\ref{alg:counterfactual})
+\begin{verbatim}
+counterfactuals_high = []
+for k in range(200):
+    x_cf, converged, d_final =
+        generate_counterfactual(
+            image, model, S_high,
+            delta_target=0.8, T=100)
+    counterfactuals_high.append(
+        (x_cf, converged, d_final))
+# Verify: >=180/200 converged
+\end{verbatim}
+
+\textbf{Step 4: Distance Measurement}
+\begin{verbatim}
+d_high_mean = mean([
+    geodesic_dist(phi(x), phi(x_cf))
+    for x_cf, conv, _ in counterfactuals_high
+    if conv])
+d_high_std = std([...])
+# Repeat for S_low
+\end{verbatim}
+
+\textbf{Step 5: Statistical Testing}
+\begin{verbatim}
+t_high = (d_high_mean - 0.75) /
+         (d_high_std / sqrt(200))
+p_high = 1 - stats.t.cdf(t_high, df=199)
+
+t_low = (d_low_mean - 0.55) /
+        (d_low_std / sqrt(200))
+p_low = stats.t.cdf(t_low, df=199)
+
+verdict = "NOT FALSIFIED" if
+    (p_high < 0.025 and p_low < 0.025)
+    else "FALSIFIED"
+\end{verbatim}
+
+\subsection{Interpreting Results}
+
+\textbf{Aggregate Metrics:}
+\begin{itemize}
+\item Primary endpoint: Pearson $\rho$ (target: $>$0.7)
+\item Secondary endpoint: CI coverage (target: 90--100\%)
+\item Plausibility: LPIPS~$<$~0.3, FID~$<$~50
+\end{itemize}
+
+\textbf{Decision Matrix:}
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{lcc}
+\toprule
+\textbf{Criterion} & \textbf{Status} & \textbf{Weight} \\ \midrule
+Primary ($\rho > 0.7$) & \checkmark / $\times$ & Critical \\
+Secondary (coverage) & \checkmark / $\times$ & Important \\
+Plausibility gates & \checkmark / $\times$ & Critical \\
+Demographic fairness & \checkmark / $\times$ & Important \\
+Failure rate ($<$50\%) & \checkmark / $\times$ & Important \\ \bottomrule
+\end{tabular}
+\end{table}
+
+If all \textit{critical} criteria met $\Rightarrow$ \textbf{NOT FALSIFIED} (potentially with restrictions)
+
+If any \textit{critical} criterion failed $\Rightarrow$ \textbf{FALSIFIED}
+
+\subsection{Troubleshooting Common Issues}
+
+\textbf{Issue 1: Low Convergence Rate ($<$180/200)}
+
+\textit{Causes:} Too many features masked ($|S| > 0.7m$), learning rate too low, target distance unrealistic
+
+\textit{Solutions:}
+\begin{itemize}
+\item Check feature set sizes (if $|S| > 35$ for $m=49$, reduce threshold or accept lower convergence)
+\item Increase learning rate to $\alpha=0.02$
+\item Relax tolerance to $\epsilon_{\text{tol}}=0.02$
+\item Flag as ``INCONCLUSIVE'' if $<$160/200 converge
+\end{itemize}
+
+\textbf{Issue 2: High LPIPS ($>$0.3) or FID ($>$50)}
+
+\textit{Causes:} Regularization too weak ($\lambda=0.1$ insufficient), masking too strict
+
+\textit{Solutions:}
+\begin{itemize}
+\item Increase regularization: try $\lambda=0.2$ or $\lambda=0.5$
+\item Reduce target distance: try $\delta_{\text{target}}=0.6$~rad
+\item Consider GAN-based counterfactuals (StyleGAN latent traversal)
+\item Flag as ``FALSIFIED (Plausibility)''
+\end{itemize}
+
+\textbf{Issue 3: Correlation Near Threshold ($\rho \approx 0.68$--0.72)}
+
+\textit{Causes:} Threshold miscalibration, noisy predictions, small sample size
+
+\textit{Solutions:}
+\begin{itemize}
+\item DO NOT adjust threshold post-hoc (p-hacking)
+\item Report exact p-value and 95\% CI
+\item Conduct sensitivity analysis: $\pm$10\% threshold variations
+\item For borderline cases, recommend ``APPROVED with RESTRICTIONS''
+\item Increase sample size to $N=2,000$ if resources permit
+\end{itemize}
+
+\textbf{Issue 4: Demographic Disparities ($>$10pp)}
+
+\textit{Causes:} Training data bias, attribution method bias, test set imbalance
+
+\textit{Solutions:}
+\begin{itemize}
+\item Acknowledge limitations transparently (Field~5, flag ``HIGH DISPARITY'')
+\item Add deployment restrictions: ``Use with caution for [group]''
+\item Require demographic audit for each case
+\item Future work: retrain model with balanced data
+\item DO NOT proceed if disparities unacceptable for application
+\end{itemize}
+
+\subsection{Forensic Report Completion}
+
+\textbf{Template Completion:}
+\begin{enumerate}
+\item Field 1: Method ID (name, version, model source)
+\item Field 2: Parameters (thresholds, settings, pre-reg timestamp)
+\item Field 3: $\Delta$-Accuracy ($\rho$, CI, p-value, MAE)
+\item Field 4: CI Calibration (coverage, binomial test)
+\item Field 5: Error Rates (falsification rate, demographic stratification, failure modes)
+\item Field 6: Limitations (dataset, model, out-of-scope)
+\item Field 7: Recommendation (verdict, confidence, restrictions)
+\end{enumerate}
+
+\textbf{Peer Review:}
+\begin{itemize}
+\item Colleague verifies calculations (spot-check 10 images)
+\item Cross-check statistical tests (reproduce p-values in R)
+\item External review (statistician, forensic expert, legal counsel)
+\end{itemize}
+
+\textbf{Finalization:}
+\begin{itemize}
+\item Export to PDF (verify all tables/figures render)
+\item Compute SHA-256 hash
+\item Archive raw data, scripts, report versions
+\end{itemize}
+
+\subsection{Disclosure Requirements}
+
+\textbf{Legal Proceedings:}
+\begin{itemize}
+\item Disclose full report to defense counsel
+\item Include all data files upon request
+\item Prepare for Daubert hearing (testability, error rates, acceptance)
+\item Court filing: attach pre-registration URL, code repository
+\end{itemize}
+
+\textbf{Regulatory Compliance:}
+\begin{itemize}
+\item EU AI Act Art.~13--15: Technical documentation, accuracy metrics
+\item GDPR Art.~22: Meaningful information, contestation
+\end{itemize}
+
+\textbf{Audit Trail:}
+\begin{itemize}
+\item Pre-registration: OSF URL, SHA-256 hash, timestamp
+\item Code version: GitHub commit hash, repository URL
+\item Data provenance: Dataset source, download date, integrity hash
+\item Report versions: Draft v1.0, final v1.0, revisions
+\end{itemize}
+
+\subsection{Final Sign-Off}
+
+I, \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_ (name), attest that:
+\begin{enumerate}
+\item This validation was conducted per pre-registered protocol (OSF ID: \_\_\_\_\_\_)
+\item No thresholds were adjusted post-hoc
+\item All results reported truthfully, including negative findings
+\item Forensic report accurately represents method's performance and limitations
+\end{enumerate}
+
+\noindent Signature: \_\_\_\_\_\_\_\_\_\_\_\_\_\_ \quad Date: \_\_\_\_\_\_\_\_\_\_
+
+\noindent Supervisor: \_\_\_\_\_\_\_\_\_\_\_\_\_\_ \quad Date: \_\_\_\_\_\_\_\_\_\_
+
+\vspace{0.3cm}
+
+\noindent \textit{Full checklist (730 lines, 11 pages) available at \texttt{[repository URL]}.}

@@ -1,0 +1,66 @@
+\section{The Evidentiary Gap: Why Current Practice Fails Requirements}
+
+XAI methods can generate visually interpretable saliency maps for face verification decisions. But current deployment practice exhibits systematic gaps preventing these explanations from satisfying regulatory requirements.
+
+\subsection{No Validation of Faithfulness}
+
+Current practice treats explanation generation and validation as separate concerns. Systems deploy XAI methods—Grad-CAM~\cite{selvaraju2017gradcam}, SHAP~\cite{lundberg2017shap}, and Integrated Gradients~\cite{sundararajan2017ig}—based on widespread adoption and intuitive visual outputs, without empirically validating that generated explanations faithfully represent model reasoning.
+
+Adebayo et al.'s~\cite{adebayo2018sanity} sanity checks and Kindermans et al.'s~\cite{kindermans2019reliability} reliability studies reveal troubling patterns. Attribution methods frequently produce contradictory explanations for the same decision and exhibit low inter-method reliability. One systematic evaluation found that popular methods correctly identified important features in only 40--69\% of test cases—better than random chance, but far below the 90--95\% reliability standards common in forensic domains like DNA analysis, as documented in the NRC forensic science report~\cite{nrc2009}.
+
+This violates multiple requirements. GDPR demands ``meaningful information''—systematically incorrect explanations don't provide meaningful information. The AI Act explicitly requires ``accurate information,'' not merely interpretability. Daubert requires testability—without validation protocols, explanations haven't passed any test.
+
+Why does this persist? The computer vision research community has historically prioritized subjective interpretability over objective faithfulness. Methods get evaluated based on whether outputs align with human intuitions rather than whether they correctly identify causal factors driving predictions. This research norm doesn't translate to forensic contexts requiring evidentiary rigor.
+
+\subsection{No Quantified Error Rates}
+
+Face verification systems report matching accuracy metrics—false positive and negative rates at various thresholds~\cite{grother2019frvt}. But explanation error rates go unquantified. Forensic analysts receive explanations with no accompanying reliability information.
+
+The XAI literature documents that explanation quality varies dramatically across conditions. Adebayo et al.~\cite{adebayo2018sanity} found faithfulness drops 20--40\% for profile faces compared to frontal poses. Low-resolution or occluded faces yield unreliable explanations. Some studies find explanation reliability varies across demographic groups—a pattern NIST's demographic effects report~\cite{grother2019frvt} also documented for face verification accuracy itself. Explanations for borderline decisions (scores near the threshold) are less reliable than for clear matches or non-matches.
+
+Yet these conditional error rates are neither measured nor communicated to operators. This violates Daubert's explicit requirement for error rate documentation and the AI Act's Article 14 mandate that oversight requires identifying ``risks, anomalies, and performance issues''—impossible without error rate knowledge.
+
+The impact: forensic investigators cannot calibrate trust appropriately. They may over-rely on unreliable explanations for difficult cases (where explanations are least trustworthy) or dismiss reliable explanations due to general skepticism.
+
+\subsection{No Standardized Validation Protocols}
+
+XAI deployment in forensic face verification lacks consensus standards for validation methodology, acceptance criteria, or reporting requirements. Each agency makes ad-hoc decisions about when explanation quality is ``good enough.''
+
+Based on vendor documentation reviews and informal practitioner consultations, we observe that while many agencies deploy some form of XAI visualization with their face recognition systems, few have established formal validation procedures or standardized benchmarks with documented acceptance thresholds. Practices vary widely: some agencies require manual review of all explanations, while others treat them as optional supplementary information with no systematic quality assessment.
+
+This violates Daubert's requirement for ``standards controlling operation'' and the AI Act's implicit standardization (requirements for ``accuracy'' and ``robustness'' presume measurable standards).
+
+Compare this to other forensic domains. DNA analysis, fingerprint comparison, and ballistic matching all have established protocols published by standards bodies (NIST, FBI) with documented acceptance criteria. Face recognition XAI lacks comparable standardization.
+
+\subsection{No Testability or Falsifiability}
+
+Current XAI outputs—typically static heatmaps showing important regions—don't constitute testable hypotheses. They make no falsifiable predictions that could be experimentally refuted.
+
+Example: if Grad-CAM produces a saliency map highlighting the eyes and nose for a face match~\cite{selvaraju2017gradcam}, this communicates ``these regions are important'' but makes no specific claim about \emph{how} they're important or \emph{what would happen} if they changed. There's no prediction to test through controlled experimentation.
+
+This violates Daubert's testability requirement and fundamental scientific method principles—unfalsifiable claims cannot be empirically validated~\cite{daubert1993}.
+
+Recent computer science research has proposed counterfactual validation frameworks where attributions predict how verification scores will change if highlighted regions are perturbed~\cite{wachter2017counterfactual}. These predictions are falsifiable—they can be tested through experiments and potentially proven wrong. Yet such frameworks aren't yet incorporated into operational forensic systems.
+
+\subsection{Confounding Model Accuracy with Explanation Accuracy}
+
+Forensic practitioners often assume that high model accuracy implies reliable explanations. If a face verification system achieves 99.7\% accuracy on benchmarks~\cite{deng2019arcface}, explanations of its decisions get presumed trustworthy.
+
+Empirical studies demonstrate that explanation faithfulness and model accuracy are independent~\cite{adebayo2018sanity,kindermans2019reliability}. A highly accurate model can produce systematically misleading explanations. Conversely, a less accurate model might produce more faithful explanations of its (incorrect) reasoning.
+
+This violates the AI Act's dual requirement: Article 13 separately mandates accuracy for predictions and accurate information for explanations. GDPR's right to explanation exists regardless of decision accuracy.
+
+The impact: this conflation creates false confidence. Agencies deploy high-accuracy face verification systems and assume accompanying explanations are automatically reliable, without independent validation.
+
+\subsection{The Form vs. Substance Compliance Gap}
+
+Current practice can achieve compliance in \textbf{form}:
+\begin{itemize}[itemsep=2pt]
+    \item Systems generate explanations, satisfying requirements to ``provide information''
+    \item Documentation describes XAI methods used (satisfying transparency about methodology)
+    \item Visual outputs reach operators through established interfaces
+\end{itemize}
+
+But current practice fails compliance in \textbf{substance}. Explanations aren't validated—accuracy cannot be demonstrated through empirical testing. Without validation protocols, error rates remain unknown, making reliability assessment impossible. The absence of standardized acceptance criteria means consistency cannot be verified across agencies or implementations. Most fundamentally, current explanations make no falsifiable claims that could be tested and potentially refuted, preventing scientific validity from being established.
+
+This gap exposes regulatory frameworks to ``checkbox compliance''—systems technically satisfy literal regulatory language while failing to meet the policy intent of enabling meaningful accountability and oversight. Table~\ref{tab:requirements-gap} details these gaps across all seven requirements.

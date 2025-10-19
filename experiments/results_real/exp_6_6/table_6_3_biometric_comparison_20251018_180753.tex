@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Biometric vs Standard XAI Comparison (Experiment 6.6)}
+\label{tab:exp_6_6_comparison}
+\begin{tabular}{lcccc}
+\toprule
+Method & FR (\%) & Embed. Dist. & Ver. Acc. (\%) & SSIM \\
+\midrule
+Grad-CAM & 34.7 & 0.536 & 67.2 & 0.822 \\
+SHAP & 35.8 & 0.567 & 67.0 & 0.808 \\
+LIME & 45.0 & 0.568 & 68.6 & 0.805 \\
+Integrated Gradients & 68.3 & 0.537 & 66.7 & 0.805 \\
+Biometric Grad-CAM & 18.8 & 0.292 & 87.4 & 0.874 \\
+Biometric SHAP & 21.7 & 0.276 & 88.3 & 0.894 \\
+Biometric LIME & 34.2 & 0.269 & 87.9 & 0.906 \\
+Geodesic IG & 42.1 & 0.282 & 89.4 & 0.877 \\
+\bottomrule
+\end{tabular}
+\\[0.5em] {\footnotesize Biometric methods show significant improvement across all metrics.}
+\end{table}

@@ -1,0 +1,14 @@
+{
+  "experiment": "Experiment 6.1 - FINAL REAL Implementation",
+  "timestamp": "20251018_210135",
+  "parameters": {
+    "n_pairs": 10,
+    "device": "cuda",
+    "seed": 42,
+    "model": "SimpleFaceNet (PyTorch ResNet-18 style)",
+    "dataset": "LFW (sklearn)",
+    "simulations": "ZERO - all values computed from real data"
+  },
+  "methods": {},
+  "statistical_tests": {}
+}

@@ -1,0 +1,153 @@
+{
+  "experiment_id": "exp_6_5",
+  "title": "Convergence and Sample Size Analysis",
+  "timestamp": "20251018_180634",
+  "parameters": {
+    "n_random_initializations": 500,
+    "max_iterations": 100,
+    "convergence_threshold": 0.01,
+    "sample_sizes": [
+      10,
+      25,
+      50,
+      100,
+      250,
+      500,
+      1000
+    ],
+    "n_bootstrap": 100,
+    "seed": 42
+  },
+  "convergence_test": {
+    "convergence_rate": 97.4,
+    "n_converged": 487,
+    "n_total": 500,
+    "median_iterations": 64.0,
+    "mean_iterations": 64.14784394250513,
+    "std_iterations": 4.743818031901508,
+    "percentile_95_iterations": 72.0,
+    "mean_loss_at_convergence": 0.016763930767042422,
+    "std_loss_at_convergence": 0.0706633672337018
+  },
+  "sample_size_test": {
+    "n_10": {
+      "n": 10,
+      "fr_mean": 47.5,
+      "fr_std": 14.99166435056495,
+      "theoretical_std": 15.798734126505199,
+      "ratio": 0.9489155416201197,
+      "ci_lower": 21.8769396583904,
+      "ci_upper": 74.51072434092406,
+      "ci_width": 52.63378468253366
+    },
+    "n_25": {
+      "n": 25,
+      "fr_mean": 48.84,
+      "fr_std": 9.737268610857976,
+      "theoretical_std": 9.991996797437437,
+      "ratio": 0.9745067786005707,
+      "ci_lower": 30.75100348289589,
+      "ci_upper": 67.23800253928272,
+      "ci_width": 36.48699905638683
+    },
+    "n_50": {
+      "n": 50,
+      "fr_mean": 46.08,
+      "fr_std": 5.850948641032495,
+      "theoretical_std": 7.0654086930622775,
+      "ratio": 0.8281118467750783,
+      "ci_lower": 33.04236812823046,
+      "ci_upper": 59.676997048975075,
+      "ci_width": 26.634628920744618
+    },
+    "n_100": {
+      "n": 100,
+      "fr_mean": 48.11,
+      "fr_std": 4.971709967405581,
+      "theoretical_std": 4.995998398718719,
+      "ratio": 0.995138422918757,
+      "ci_lower": 38.569689330926586,
+      "ci_upper": 57.790146092295814,
+      "ci_width": 19.220456761369228
+    },
+    "n_250": {
+      "n": 250,
+      "fr_mean": 48.00399999999999,
+      "fr_std": 3.13814977335372,
+      "theoretical_std": 3.15974682530104,
+      "ratio": 0.9931649422749994,
+      "ci_lower": 41.8881610091976,
+      "ci_upper": 54.18025112238819,
+      "ci_width": 12.29209011319059
+    },
+    "n_500": {
+      "n": 500,
+      "fr_mean": 48.232,
+      "fr_std": 2.3107955340098787,
+      "theoretical_std": 2.2342784070030306,
+      "ratio": 1.0342469079802301,
+      "ci_lower": 43.88231578551834,
+      "ci_upper": 52.608643882353725,
+      "ci_width": 8.726328096835388
+    },
+    "n_1000": {
+      "n": 1000,
+      "fr_mean": 48.103,
+      "fr_std": 1.4544040016446598,
+      "theoretical_std": 1.57987341265052,
+      "ratio": 0.9205826175684779,
+      "ci_lower": 45.019437802639516,
+      "ci_upper": 51.20108091905469,
+      "ci_width": 6.181643116415174
+    }
+  },
+  "statistical_power": {
+    "n_50": {
+      "n": 50,
+      "standard_error": 7.035623639735144,
+      "ci_width_95": 36.24513107994231,
+      "power_to_detect": 0.01899362894488233,
+      "effect_size": -0.10016742116155997
+    },
+    "n_100": {
+      "n": 100,
+      "standard_error": 4.9749371855331,
+      "ci_width_95": 25.6291779716225,
+      "power_to_detect": 0.030913200531967003,
+      "effect_size": -0.10016742116155997
+    },
+    "n_250": {
+      "n": 250,
+      "standard_error": 3.146426544510455,
+      "ci_width_95": 16.209315389628276,
+      "power_to_detect": 0.07270688572435206,
+      "effect_size": -0.10016742116155997
+    },
+    "n_500": {
+      "n": 500,
+      "standard_error": 2.2248595461286986,
+      "ci_width_95": 11.461716830397616,
+      "power_to_detect": 0.1605881987443885,
+      "effect_size": -0.10016742116155997
+    },
+    "n_1000": {
+      "n": 1000,
+      "standard_error": 1.5732132722552274,
+      "ci_width_95": 8.104657694814138,
+      "power_to_detect": 0.36842876893215826,
+      "effect_size": -0.10016742116155997
+    }
+  },
+  "hypotheses": {
+    "H5a": {
+      "statement": "Algorithm converges within T=100 iterations for >95% of cases",
+      "result": "CONFIRMED",
+      "convergence_rate": 97.4
+    },
+    "H5b": {
+      "statement": "std(FR) \u221d 1/\u221an (Central Limit Theorem)",
+      "result": "VALIDATED",
+      "note": "Standard deviation follows theoretical 1/\u221an pattern"
+    }
+  }
+}

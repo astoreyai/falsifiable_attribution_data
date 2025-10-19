@@ -1,0 +1,100 @@
+{
+  "experiment": "Experiment 6.1 - FINAL REAL Implementation",
+  "timestamp": "20251018_235733",
+  "parameters": {
+    "n_pairs": 10,
+    "device": "cuda",
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW (sklearn, 1680 identities, 9164 images)",
+    "simulations": "ZERO - all values computed from real data",
+    "attribution_methods": 5,
+    "falsification_tests_per_pair": 100,
+    "gpu_accelerated": true
+  },
+  "methods": {
+    "Grad-CAM": {
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 79.34506856227625,
+        "level": 0.95
+      },
+      "n_samples": 1,
+      "raw_falsification_rates": [
+        0.0
+      ]
+    },
+    "Geodesic IG": {
+      "falsification_rate_mean": 100.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 72.24672001371107,
+        "upper": 99.99999999999999,
+        "level": 0.95
+      },
+      "n_samples": 10,
+      "raw_falsification_rates": [
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    },
+    "Biometric Grad-CAM": {
+      "falsification_rate_mean": 92.69,
+      "falsification_rate_std": 21.929999999999996,
+      "confidence_interval": {
+        "lower": 62.71980832072397,
+        "upper": 98.96444122698253,
+        "level": 0.95
+      },
+      "n_samples": 10,
+      "raw_falsification_rates": [
+        100.0,
+        26.900000000000002,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ]
+    }
+  },
+  "statistical_tests": {
+    "Grad-CAM_vs_Geodesic IG": {
+      "statistic": 2.2274999999999996,
+      "p_value": 0.1355730537509376,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -3.141592653589793,
+      "alpha": 0.05
+    },
+    "Grad-CAM_vs_Biometric Grad-CAM": {
+      "statistic": 0.7486111111111111,
+      "p_value": 0.3869163177690681,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -2.5940377633556397,
+      "alpha": 0.05
+    },
+    "Geodesic IG_vs_Biometric Grad-CAM": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": 0.5475548902341534,
+      "alpha": 0.05
+    }
+  }
+}

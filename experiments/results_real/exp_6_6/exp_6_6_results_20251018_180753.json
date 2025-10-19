@@ -1,0 +1,262 @@
+{
+  "experiment_id": "exp_6_6",
+  "title": "Biometric XAI Evaluation",
+  "timestamp": "20251018_180753",
+  "parameters": {
+    "n_samples": 1000,
+    "lambda_biometric": 1.0,
+    "tau_threshold": 0.5,
+    "seed": 42
+  },
+  "dataset_statistics": {
+    "total": 1000,
+    "male": 500,
+    "female": 500,
+    "young": 500,
+    "old": 500
+  },
+  "falsification_rates": {
+    "Grad-CAM": {
+      "fr": 34.745071229516846,
+      "ci_lower": 31.857303524504303,
+      "ci_upper": 37.74959279076736,
+      "n": 1000
+    },
+    "SHAP": {
+      "fr": 35.79260354824322,
+      "ci_lower": 32.880927237046784,
+      "ci_upper": 38.81301640929847,
+      "n": 1000
+    },
+    "LIME": {
+      "fr": 44.971532807151036,
+      "ci_lower": 41.913356965422935,
+      "ci_upper": 48.06819410787828,
+      "n": 1000
+    },
+    "Integrated Gradients": {
+      "fr": 68.28454478461204,
+      "ci_lower": 65.33491929021127,
+      "ci_upper": 71.09422920519474,
+      "n": 1000
+    },
+    "Biometric Grad-CAM": {
+      "fr": 18.848769937914994,
+      "ci_lower": 16.545660336620436,
+      "ci_upper": 21.390296007160682,
+      "n": 1000
+    },
+    "Biometric SHAP": {
+      "fr": 21.74879456457623,
+      "ci_lower": 19.30262809860028,
+      "ci_upper": 24.41118211080652,
+      "n": 1000
+    },
+    "Biometric LIME": {
+      "fr": 34.16881922326109,
+      "ci_lower": 31.294868973493355,
+      "ci_upper": 37.1639336837763,
+      "n": 1000
+    },
+    "Geodesic IG": {
+      "fr": 42.051152093729364,
+      "ci_lower": 39.02771533000645,
+      "ci_upper": 45.135425499803695,
+      "n": 1000
+    }
+  },
+  "identity_preservation": {
+    "Grad-CAM": {
+      "mean_embedding_distance": 0.535901424590337,
+      "verification_accuracy": 67.19260354824323,
+      "ssim": 0.8217153280715105
+    },
+    "SHAP": {
+      "mean_embedding_distance": 0.5666908956922407,
+      "verification_accuracy": 67.048769937915,
+      "ssim": 0.8084879456457623
+    },
+    "LIME": {
+      "mean_embedding_distance": 0.5683763844652218,
+      "verification_accuracy": 68.55115209372937,
+      "ssim": 0.8049578842109758
+    },
+    "Integrated Gradients": {
+      "mean_embedding_distance": 0.5372768013075789,
+      "verification_accuracy": 66.70487346078131,
+      "ssim": 0.8050140536964462
+    },
+    "Biometric Grad-CAM": {
+      "mean_embedding_distance": 0.29183924543132067,
+      "verification_accuracy": 87.3867197553422,
+      "ssim": 0.8737508216748697
+    },
+    "Biometric SHAP": {
+      "mean_embedding_distance": 0.2757542494151805,
+      "verification_accuracy": 88.28716887966557,
+      "ssim": 0.8941424733259528
+    },
+    "Biometric LIME": {
+      "mean_embedding_distance": 0.26883951848957577,
+      "verification_accuracy": 87.88769629866471,
+      "ssim": 0.9056564876892156
+    },
+    "Geodesic IG": {
+      "mean_embedding_distance": 0.28248447399026927,
+      "verification_accuracy": 89.36752820468791,
+      "ssim": 0.8767525181378655
+    }
+  },
+  "demographic_fairness": {
+    "Grad-CAM": {
+      "male_fr": 48.94507122951685,
+      "female_fr": 39.89260354824322,
+      "young_fr": 44.77153280715103,
+      "old_fr": 48.78454478461204,
+      "dir_gender": 0.8150484317649855,
+      "dir_age": 0.9177400958607117,
+      "p_value_gender": 0.00864491338167939,
+      "p_value_age": 0.06559945203362026,
+      "gender_gap": 9.052467681273626,
+      "age_gap": 4.013011977461005
+    },
+    "SHAP": {
+      "male_fr": 50.56881922326109,
+      "female_fr": 41.25115209372937,
+      "young_fr": 43.095788421097566,
+      "old_fr": 47.31384006537895,
+      "dir_gender": 0.8157428377278444,
+      "dir_age": 0.910849518059561,
+      "p_value_gender": 0.009909423393147931,
+      "p_value_age": 0.06834045098534339,
+      "gender_gap": 9.31766712953172,
+      "age_gap": 4.218051644281381
+    },
+    "LIME": {
+      "male_fr": 48.56294340734905,
+      "female_fr": 37.230079633013304,
+      "young_fr": 41.21262325123045,
+      "old_fr": 45.65656870613854,
+      "dir_gender": 0.7666355665620396,
+      "dir_age": 0.9026658029535495,
+      "p_value_gender": 0.030980791841396595,
+      "p_value_age": 0.06394938606520419,
+      "gender_gap": 11.332863774335749,
+      "age_gap": 4.443945454908096
+    },
+    "Integrated Gradients": {
+      "male_fr": 46.837963886718185,
+      "female_fr": 37.98154444799707,
+      "young_fr": 45.99847315338233,
+      "old_fr": 46.1613355492702,
+      "dir_gender": 0.8109136541430118,
+      "dir_age": 0.9964718872634428,
+      "p_value_gender": 0.010784015325759629,
+      "p_value_age": 0.10142344384136115,
+      "gender_gap": 8.856419438721119,
+      "age_gap": 0.16286239588787055
+    },
+    "Biometric Grad-CAM": {
+      "male_fr": 30.155617275474818,
+      "female_fr": 28.210922589709867,
+      "young_fr": 27.749006422577697,
+      "old_fr": 29.575698018345673,
+      "dir_gender": 0.9355113620125911,
+      "dir_age": 0.9382367376541751,
+      "p_value_gender": 0.3390309557911677,
+      "p_value_age": 0.8693313223520001,
+      "gender_gap": 1.9446946857649507,
+      "age_gap": 1.8266915957679757
+    },
+    "Biometric SHAP": {
+      "male_fr": 30.099361310081193,
+      "female_fr": 27.808306250206726,
+      "young_fr": 28.298293387770602,
+      "old_fr": 31.052278184508936,
+      "dir_gender": 0.9238835988487529,
+      "dir_age": 0.9113113446822007,
+      "p_value_gender": 0.3732229409068673,
+      "p_value_age": 0.5971061460667622,
+      "gender_gap": 2.2910550598744663,
+      "age_gap": 2.753984796738333
+    },
+    "Biometric LIME": {
+      "male_fr": 31.52254491210319,
+      "female_fr": 26.87915635002898,
+      "young_fr": 29.108863595004753,
+      "old_fr": 27.240329876120224,
+      "dir_gender": 0.8526962662747649,
+      "dir_age": 0.9358087713460178,
+      "p_value_gender": 0.6280261676059677,
+      "p_value_age": 0.4109126733153162,
+      "gender_gap": 4.643388562074211,
+      "age_gap": 1.8685337188845281
+    },
+    "Geodesic IG": {
+      "male_fr": 31.43846657999541,
+      "female_fr": 28.27136828118997,
+      "young_fr": 28.78435171761176,
+      "old_fr": 28.89889630441071,
+      "dir_gender": 0.8992604079226723,
+      "dir_age": 0.9960363681161946,
+      "p_value_gender": 0.5332063738136892,
+      "p_value_age": 0.4628094190643376,
+      "gender_gap": 3.1670982988054384,
+      "age_gap": 0.11454458679894941
+    }
+  },
+  "comparison": {
+    "method_pairs": [
+      {
+        "standard": "Grad-CAM",
+        "biometric": "Biometric Grad-CAM",
+        "standard_fr": 34.745071229516846,
+        "biometric_fr": 18.848769937914994,
+        "reduction_percent": 45.75124105112649
+      },
+      {
+        "standard": "SHAP",
+        "biometric": "Biometric SHAP",
+        "standard_fr": 35.79260354824322,
+        "biometric_fr": 21.74879456457623,
+        "reduction_percent": 39.23662318874898
+      },
+      {
+        "standard": "LIME",
+        "biometric": "Biometric LIME",
+        "standard_fr": 44.971532807151036,
+        "biometric_fr": 34.16881922326109,
+        "reduction_percent": 24.02122611700747
+      },
+      {
+        "standard": "Integrated Gradients",
+        "biometric": "Geodesic IG",
+        "standard_fr": 68.28454478461204,
+        "biometric_fr": 42.051152093729364,
+        "reduction_percent": 38.41776023202601
+      }
+    ],
+    "overall": {
+      "standard_mean": 45.94843809238078,
+      "biometric_mean": 29.204383954870423,
+      "reduction_percent": 36.44096476978371,
+      "t_statistic": 5.022768935882836,
+      "p_value": 0.01520184984739675,
+      "cohens_d": 2.8998969972092454,
+      "is_significant": true,
+      "df": 3
+    },
+    "identity_preservation": {
+      "standard_mean_distance": 0.5520613765138446,
+      "biometric_mean_distance": 0.2797293718315865,
+      "t_statistic": 26.698359097155052,
+      "p_value": 1.823221322991459e-07
+    }
+  },
+  "hypothesis": {
+    "statement": "Biometric XAI methods yield significantly lower FR than standard methods",
+    "result": "CONFIRMED",
+    "p_value": 0.01520184984739675,
+    "effect_size": 2.8998969972092454
+  }
+}

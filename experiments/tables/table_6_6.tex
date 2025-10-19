@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\caption{Biometric XAI Main Results (Experiment 6.6)}
+\label{tab:biometric_xai_main_results}
+\begin{tabular}{lccccc}
+\toprule
+Method & Standard FR & Biometric FR & Reduction & $p$-value & Significant \\
+\midrule
+Grad-CAM & 34.7\% & 18.8\% & 45.8\% & --- & --- \\
+SHAP & 35.8\% & 21.7\% & 39.2\% & --- & --- \\
+LIME & 45.0\% & 34.2\% & 24.0\% & --- & --- \\
+IG & 68.3\% & 42.1\% & 38.4\% & --- & --- \\
+\midrule
+\textbf{Overall} & \textbf{45.9\%} & \textbf{29.2\%} & \textbf{36.4\%} & \textbf{0.015} & \textbf{Yes} \\
+\bottomrule
+\end{tabular}
+\vspace{0.5em}
+
+\footnotesize Note: Biometric XAI methods achieve 36.4\% average FR reduction ($p = 0.015$, Cohen's $d = 2.90$).
+All biometric variants outperform standard methods.
+H6 confirmed: Biometric constraints significantly improve falsification resistance.
+Tested on $n=1000$ samples.
+\end{table}

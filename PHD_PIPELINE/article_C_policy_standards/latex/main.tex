@@ -1,0 +1,72 @@
+\documentclass[journal]{IEEEtran}
+
+% Required packages for IEEE Transactions
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% Correct bad hyphenation here
+\hyphenation{ex-plain-able}
+
+\begin{document}
+
+\title{From ``Meaningful Information'' to Testable Explanations: Translating AI Act/GDPR/Daubert into XAI Validation for Face Verification}
+
+\author{Aaron~W.~Storey,~\IEEEmembership{Student Member,~IEEE,}
+        and~Masudul~H.~Imtiaz,~\IEEEmembership{Member,~IEEE}
+\thanks{A. W. Storey and M. H. Imtiaz are with the Department of Computer Science, Clarkson University, Potsdam, NY 13699, USA (e-mail: storeyaw@clarkson.edu; mimtiaz@clarkson.edu).}
+\thanks{Manuscript received October 15, 2025; revised XXX XX, 2025.}}
+
+\markboth{AI \& Law Policy Journal,~Vol.~XX, No.~X, XXX~2026}%
+{Storey \MakeLowercase{\textit{et al.}}: Translating Legal Requirements to XAI Validation}
+
+\maketitle
+
+\begin{abstract}
+Face recognition systems deployed in law enforcement face a critical accountability gap. While regulatory frameworks—the EU AI Act, GDPR, and U.S. Daubert standards—mandate explainability with known error rates, current practice generates explanations without validating whether they accurately reflect how these systems actually make decisions. This creates legal uncertainty: when face recognition leads to arrest, can we trust that the explanation highlighting "influential facial features" is truthful rather than a plausible-looking fiction?
+
+Through analysis of three major legal frameworks, we identify seven evidentiary requirements that explainable AI (XAI) must satisfy: meaningful information, testability, known error rates, appropriate accuracy, adherence to standards, comprehensibility, and human oversight support. For each requirement, we operationalize vague legal language—"meaningful information," "appropriate transparency"—into measurable technical criteria with acceptance thresholds grounded in statistical practice and forensic science precedent. A compliance template enables practitioners to systematically assess whether deployed systems meet regulatory standards.
+
+Our analysis reveals a troubling pattern: current XAI practice satisfies compliance in form (explanations are generated) but not substance (explanations are not validated). This form-versus-substance gap exposes legal systems to wrongful identifications based on misleading explanations. We conclude with stakeholder-specific recommendations for regulators, developers, auditors, and courts to establish evidence-based validation protocols that protect civil liberties while enabling beneficial applications of face verification technology.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Explainable AI; Face Recognition; AI Regulation; GDPR; EU AI Act; Daubert Standard; Evidence Standards; Forensic Science
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+% Include sections
+\input{sections/01_introduction.tex}
+\input{sections/02_requirements.tex}
+\input{sections/03_gap.tex}
+\input{sections/04_evidence.tex}
+\input{sections/05_template.tex}
+\input{sections/06_discussion.tex}
+\input{sections/07_conclusion.tex}
+
+% Tables
+\input{tables.tex}
+
+% Bibliography - IEEE style
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

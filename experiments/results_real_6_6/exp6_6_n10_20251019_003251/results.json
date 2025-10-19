@@ -1,0 +1,104 @@
+{
+  "experiment": "Experiment 6.6 - REAL Biometric XAI Evaluation",
+  "timestamp": "20251019_003251",
+  "parameters": {
+    "n_pairs": 10,
+    "device": "cuda",
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW with demographic labels",
+    "simulations": "ZERO - all values computed from real data",
+    "attribution_methods": 8,
+    "standard_methods": 4,
+    "biometric_methods": 4
+  },
+  "dataset_statistics": {
+    "total": 10,
+    "genuine": 5,
+    "impostor": 5,
+    "male": 6,
+    "female": 4,
+    "young": 2,
+    "old": 8
+  },
+  "falsification_rates": {},
+  "identity_preservation": {
+    "LIME": {
+      "mean_embedding_distance": 1.6338819026947022,
+      "verification_accuracy": 0.0,
+      "ssim": 0.0
+    },
+    "Geodesic IG": {
+      "mean_embedding_distance": 0.314380419254303,
+      "verification_accuracy": 90.0,
+      "ssim": 0.0
+    },
+    "Biometric LIME": {
+      "mean_embedding_distance": 1.6150519371032714,
+      "verification_accuracy": 0.0,
+      "ssim": 0.0
+    },
+    "Biometric Geodesic IG": {
+      "mean_embedding_distance": 0.314380419254303,
+      "verification_accuracy": 90.0,
+      "ssim": 0.0
+    }
+  },
+  "demographic_fairness": {
+    "LIME": {
+      "male_fr": 0.0,
+      "female_fr": 0.0,
+      "young_fr": 0.0,
+      "old_fr": 0.0,
+      "dir_gender": 1.0,
+      "dir_age": 1.0,
+      "p_value_gender": NaN,
+      "p_value_age": NaN,
+      "gender_gap": 0.0,
+      "age_gap": 0.0
+    },
+    "Geodesic IG": {
+      "male_fr": 0.0,
+      "female_fr": 0.0,
+      "young_fr": 0.0,
+      "old_fr": 0.0,
+      "dir_gender": 1.0,
+      "dir_age": 1.0,
+      "p_value_gender": NaN,
+      "p_value_age": NaN,
+      "gender_gap": 0.0,
+      "age_gap": 0.0
+    },
+    "Biometric LIME": {
+      "male_fr": 0.0,
+      "female_fr": 0.0,
+      "young_fr": 0.0,
+      "old_fr": 0.0,
+      "dir_gender": 1.0,
+      "dir_age": 1.0,
+      "p_value_gender": NaN,
+      "p_value_age": NaN,
+      "gender_gap": 0.0,
+      "age_gap": 0.0
+    },
+    "Biometric Geodesic IG": {
+      "male_fr": 0.0,
+      "female_fr": 0.0,
+      "young_fr": 0.0,
+      "old_fr": 0.0,
+      "dir_gender": 1.0,
+      "dir_age": 1.0,
+      "p_value_gender": NaN,
+      "p_value_age": NaN,
+      "gender_gap": 0.0,
+      "age_gap": 0.0
+    }
+  },
+  "comparison": {},
+  "hypothesis": {
+    "statement": "Biometric XAI methods yield significantly lower FR than standard methods",
+    "result": "REJECTED",
+    "p_value": 1.0,
+    "effect_size": 0.0
+  }
+}

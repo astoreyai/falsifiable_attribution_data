@@ -1,0 +1,255 @@
+{
+  "experiment": "Experiment 6.3 - REAL Attribute-Based Validation",
+  "timestamp": "20251019_003318",
+  "parameters": {
+    "n_samples": 300,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.3,
+    "device": "cuda",
+    "seed": 42,
+    "model": "FaceNet (Inception-ResNet-V1 with VGGFace2 pre-trained weights)",
+    "dataset": "LFW with REAL InsightFace attribute detection",
+    "attribution_method": "Grad-CAM",
+    "simulations": "ZERO - all attributes detected from real landmark positions",
+    "gpu_accelerated": true
+  },
+  "attribute_results": {
+    "mustache": {
+      "rank": 1,
+      "category": "occlusion",
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 8.966685370757144,
+        "level": 0.95
+      },
+      "n_samples": 39,
+      "raw_frs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "nose_large": {
+      "rank": 2,
+      "category": "geometric",
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 22.80953723541984,
+        "level": 0.95
+      },
+      "n_samples": 13,
+      "raw_frs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "smiling": {
+      "rank": 3,
+      "category": "expression",
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 14.865487460862086,
+        "level": 0.95
+      },
+      "n_samples": 22,
+      "raw_frs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "mouth_open": {
+      "rank": 4,
+      "category": "expression",
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 9.180986822558395,
+        "level": 0.95
+      },
+      "n_samples": 38,
+      "raw_frs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "glasses": {
+      "rank": 5,
+      "category": "occlusion",
+      "falsification_rate_mean": 0.0,
+      "falsification_rate_std": 0.0,
+      "confidence_interval": {
+        "lower": 2.7755575615628914e-15,
+        "upper": 24.249400665524085,
+        "level": 0.95
+      },
+      "n_samples": 12,
+      "raw_frs": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "category_analysis": {
+    "category_means": {
+      "occlusion": 0.0,
+      "geometric": 0.0,
+      "expression": 0.0
+    },
+    "ranking": [
+      [
+        "occlusion",
+        0.0
+      ],
+      [
+        "geometric",
+        0.0
+      ],
+      [
+        "expression",
+        0.0
+      ]
+    ]
+  },
+  "statistical_tests": {
+    "anova": {
+      "f_statistic": NaN,
+      "p_value": NaN,
+      "is_significant": false
+    },
+    "hypothesis_test": {
+      "occlusion_mean": 0.0,
+      "geometric_mean": 0.0,
+      "difference": 0.0,
+      "hypothesis_supported": false,
+      "t_statistic": NaN,
+      "t_p_value": NaN
+    }
+  },
+  "key_findings": {
+    "most_falsifiable_attribute": "mustache",
+    "most_falsifiable_category": "occlusion",
+    "hypothesis_supported": false,
+    "n_attributes_tested": 5
+  }
+}

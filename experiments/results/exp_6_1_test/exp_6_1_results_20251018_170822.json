@@ -1,0 +1,83 @@
+{
+  "experiment_id": "exp_6_1",
+  "title": "Falsification Rate Comparison of Attribution Methods",
+  "timestamp": "20251018_170822",
+  "parameters": {
+    "n_pairs": 10,
+    "K_counterfactuals": 100,
+    "theta_high": 0.7,
+    "theta_low": 0.2,
+    "tau_high": 0.8,
+    "tau_low": 0.3,
+    "epsilon_margin": 0.3,
+    "seed": 42
+  },
+  "sample_size_validation": {
+    "n_samples": 10,
+    "required_n": 221,
+    "is_valid": false
+  },
+  "results": {
+    "Grad-CAM": {
+      "falsification_rate": 43.49348011592405,
+      "confidence_interval": {
+        "lower": 19.12018637374615,
+        "upper": 71.47831921968427,
+        "level": 0.95
+      },
+      "n_samples": 10
+    },
+    "SHAP": {
+      "falsification_rate": 48.47143890458981,
+      "confidence_interval": {
+        "lower": 22.563868146647366,
+        "upper": 75.2274613436736,
+        "level": 0.95
+      },
+      "n_samples": 10
+    },
+    "LIME": {
+      "falsification_rate": 51.70381488360559,
+      "confidence_interval": {
+        "lower": 24.901310665162622,
+        "upper": 77.5605900718583,
+        "level": 0.95
+      },
+      "n_samples": 10
+    }
+  },
+  "statistical_tests": {
+    "Grad-CAM_vs_SHAP": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.09992450865764568,
+      "alpha": 0.05
+    },
+    "Grad-CAM_vs_LIME": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.16458339053136473,
+      "alpha": 0.05
+    },
+    "SHAP_vs_LIME": {
+      "statistic": 0.0,
+      "p_value": 1.0,
+      "is_significant": false,
+      "test_name": "Chi-square test",
+      "effect_size": -0.06465888187371904,
+      "alpha": 0.05
+    }
+  },
+  "key_findings": {
+    "best_method": "Grad-CAM",
+    "worst_method": "LIME",
+    "range": [
+      43.49348011592405,
+      51.70381488360559
+    ]
+  }
+}
