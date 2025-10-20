@@ -61,8 +61,11 @@ experiments/*/visualizations/*.png
 # Dataset downloads (can be re-downloaded)
 data/lfw/
 data/celeba/
+data/celeba_mask/
+data/celeba_spoof/
 data/cfp-fp/
 data/vggface2/
+data/results/
 
 # Model weights (if very large)
 *.pt
